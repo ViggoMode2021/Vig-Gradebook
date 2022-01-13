@@ -1,0 +1,40 @@
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+
+  <div class="col-md-8">
+      <table id="example" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+          <tr>
+            <td>ID</td>
+            <td>Subject</td>
+            <td>Teacher</td>
+            <td>Student First Name</td>
+            <td>Student Last Name</td>
+            <td>Graduation Year</td>
+            <td>Grade</td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in records_2 %}
+          <tr>
+            <td>{{row[0]}}</td>
+            <td>{{row[1]}}</td>
+            <td>{{row[2]}}</td>
+            <td>{{row[3]}}</td>
+            <td>{{row[4]}}</td>
+            <td>{{row[5]}}</td>
+            <td>{{row[6]}}</td>
+            <td width="130">
+              <a href="/edit/{{row[0]}}" class="btn btn-secondary btn-sm">edit</a>
+              <a href="/delete/{{row[0]}}" class="btn btn-danger btn-delete btn-sm">delete</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
