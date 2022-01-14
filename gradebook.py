@@ -1,7 +1,21 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, flash, url_for
 import psycopg2
+import psycopg2.extras
 
 app = Flask(__name__)
+
+#TO DO:
+
+#Make photos
+#Duplicate html, update, and query pages
+#CSS
+#Add teachers
+#Add administrators
+#Add back to home button
+#Add delete option
+#Table length?
+#Add advanced queries
+#Add update integer
 
 @app.route('/')
 def main():
@@ -22,6 +36,11 @@ def period_3_Spanish_2_enroll():
 def period_5_Spanish_2_enroll():
     title_two = 'Period 5 Spanish 2 enroll or check enrollment'
     return render_template('period_5_Spanish_2_enroll.html', title=title_two)
+
+@app.route('/regular_verbs_worksheet_period_1')
+def regular_verbs_worksheet_period_1():
+    title_two = 'regular_verbs_worksheet_period_1'
+    return render_template('regular_verbs_worksheet_period_1.html', title=title_two)
 
 hostname = 'localhost'
 database = 'Gradebook'
@@ -52,6 +71,8 @@ def update():
         graduation_year = request.form.get("graduation year")
         grade = request.form.get("grade")
 
+        title_two = "Period 1 Spanish 1 enroll or check enrollment" #This title appears once the enroll button is hit.
+
         insert_values = [(subject, teacher, first_name, last_name, graduation_year, grade)]
 
         for record in insert_values:
@@ -70,7 +91,7 @@ def update():
         if conn is not None:
             conn.close()
 
-    return render_template('period_1_Spanish_1_enroll.html')
+    return render_template('period_1_Spanish_1_enroll.html',title =title_two)
 
 @app.route('/query', methods=['POST'])
 def query():
@@ -99,6 +120,33 @@ def query():
 
     return render_template('query_page.html', records_2 = records_2)
 
+@app.route('/query_regular_verbs_ws_p1', methods=['POST'])
+def query_regular_verbs_ws_p1():
+    conn = psycopg2.connect(
+            host = hostname,
+            dbname = database,
+            user = username,
+            password = pwd,
+            port = port_id)
+
+    c = conn.cursor()
+
+    s = "SELECT * FROM period_1_spanish_1"
+    c.execute(s)
+    records_2 = c.fetchall()
+    #print(records)
+
+    #loop through results
+    #print_records = ''
+    #for record_2 in records_2[0:6]:
+        #print_records += str(record_2) + "\n"
+
+    #conn.commit()
+
+    #conn.close()
+
+    return render_template('regular_verbs_worksheet_period_1.html', records_2 = records_2)
+
 @app.route('/update_2', methods=['POST'])
 def update_2():
     try:
@@ -120,6 +168,8 @@ def update_2():
         graduation_year_2 = request.form.get("graduation year_2")
         grade_2 = request.form.get("grade_2")
 
+        title_two = "Period 3 Spanish 2 enroll or check enrollment" #This title appears once the enroll button is hit.
+
         insert_values_2 = [(subject_2, teacher_2, first_name_2, last_name_2, graduation_year_2, grade_2)]
 
         for record in insert_values_2:
@@ -138,7 +188,7 @@ def update_2():
         if conn is not None:
             conn.close()
 
-    return render_template('period_3_Spanish_2_enroll.html')
+    return render_template('period_3_Spanish_2_enroll.html', title = title_two)
 
 @app.route('/query_2', methods=['POST'])
 def query_2():
@@ -156,6 +206,66 @@ def query_2():
     records_3 = c.fetchall()
 
     return render_template('query_page_period_3.html', records_3 = records_3)
+
+@app.route('/update_3', methods=['POST'])
+def update_3():
+    try:
+        conn = psycopg2.connect(
+            host = hostname,
+            dbname = database,
+            user = username,
+            password = pwd,
+            port = port_id)
+
+        cur = conn.cursor()
+
+        insert_script_3 = "INSERT INTO period_5_spanish_2 (subject, teacher, student_first_name, student_last_name, student_graduation_year, student_grade) VALUES (%s, %s, %s, %s, %s, %s)"
+
+        subject_3 = request.form.get("subject_3")
+        teacher_3 = request.form.get("teacher_3")
+        first_name_3 = request.form.get("first name_3")
+        last_name_3 = request.form.get("last name_3")
+        graduation_year_3 = request.form.get("graduation year_3")
+        grade_3 = request.form.get("grade_3")
+
+        title_two = "Period 5 Spanish 2 enroll or check enrollment" #This title appears once the enroll button is hit.
+
+        insert_values_3 = [(subject_3, teacher_3, first_name_3, last_name_3, graduation_year_3, grade_3)]
+
+        for record in insert_values_3:
+            cur.execute(insert_script_3, record)
+
+        cur.execute('SELECT * FROM period_5_spanish_2')
+        for record in cur.fetchall():
+            print(record)
+
+        conn.commit()
+    except Exception as error:
+        print(error)
+    finally:
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            conn.close()
+
+    return render_template('period_5_Spanish_2_enroll.html', title = title_two)
+
+@app.route('/query_3', methods=['POST'])
+def query_3():
+    conn = psycopg2.connect(
+            host = hostname,
+            dbname = database,
+            user = username,
+            password = pwd,
+            port = port_id)
+
+    c = conn.cursor()
+
+    s_3 = "SELECT * FROM period_5_spanish_2"
+    c.execute(s_3)
+    records_4 = c.fetchall()
+
+    return render_template('query_page_period_5.html', records_4 = records_4)
 
 if __name__ == "__main__":
     app.run(debug=True)
