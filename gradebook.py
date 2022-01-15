@@ -24,17 +24,17 @@ def main():
 
 @app.route('/period_1_Spanish_1_enroll')
 def period_1_Spanish_1_enroll():
-    title_two = 'Period 1 Spanish 1 enroll or check enrollment'
+    title_two = 'enroll or check enrollment'
     return render_template('period_1_Spanish_1_enroll.html', title=title_two)
 
 @app.route('/period_3_Spanish_2_enroll')
 def period_3_Spanish_2_enroll():
-    title_two = 'Period 3 Spanish 2 enroll or check enrollment'
+    title_two = 'enroll or check enrollment'
     return render_template('period_3_Spanish_2_enroll.html', title=title_two)
 
 @app.route('/period_5_Spanish_2_enroll')
 def period_5_Spanish_2_enroll():
-    title_two = 'Period 5 Spanish 2 enroll or check enrollment'
+    title_two = 'enroll or check enrollment'
     return render_template('period_5_Spanish_2_enroll.html', title=title_two)
 
 @app.route('/regular_verbs_worksheet_period_1')
@@ -266,6 +266,35 @@ def query_3():
     records_4 = c.fetchall()
 
     return render_template('query_page_period_5.html', records_4 = records_4)
+
+@app.route('/update_period_3_grades', methods=['POST'])
+def update_period_3_grades():
+    return render_template('update_period_3_grades.html')
+
+@app.route('/update_period_3_grades_button', methods=['POST'])
+def update_period_3_grades_button():
+    conn = psycopg2.connect(
+            host = hostname,
+            dbname = database,
+            user = username,
+            password = pwd,
+            port = port_id)
+
+    cur = conn.cursor()
+
+    last_name_3 = request.form.get("student_last_name")
+    new_grade_3 = request.form.get("student_new_grade")
+
+    period_3_update_grades_query = "UPDATE period_3_spanish_2 SET student_grade = (%s) WHERE student_last_name = (%s)"
+
+    insert_values = [(new_grade_3, last_name_3)]
+
+    for record in insert_values:
+        cur.execute(period_3_update_grades_query, record)
+
+    conn.commit()
+
+    return render_template('update_period_3_grades.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
