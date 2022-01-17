@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, flash, url_for
 import psycopg2
-import psycopg2.extras
 
 app = Flask(__name__)
 
@@ -17,10 +16,23 @@ app = Flask(__name__)
 #Add advanced queries
 #Add update integer
 
+hostname = 'localhost'
+database = 'Gradebook'
+username = 'postgres'
+pwd = ''
+port_id = 5432
+conn = None
+cur = None
+
 @app.route('/')
 def main():
     title_two = 'Gradebook main page'
     return render_template('main_page.html', title=title_two)
+
+@app.route('/main_page_2')
+def main_page_2():
+    title_two = 'Gradebook main page'
+    return render_template('main_page_2.html', title=title_two)
 
 @app.route('/period_1_Spanish_1_enroll')
 def period_1_Spanish_1_enroll():
@@ -42,13 +54,6 @@ def regular_verbs_worksheet_period_1():
     title_two = 'regular_verbs_worksheet_period_1'
     return render_template('regular_verbs_worksheet_period_1.html', title=title_two)
 
-hostname = 'localhost'
-database = 'Gradebook'
-username = 'postgres'
-pwd = ''
-port_id = 5432
-conn = None
-cur = None
 
 @app.route('/update', methods=['POST'])
 def update():
@@ -114,9 +119,8 @@ def query():
     #for record_2 in records_2[0:6]:
         #print_records += str(record_2) + "\n"
 
-    #conn.commit()
-
-    #conn.close()
+    conn.commit()
+    conn.close()
 
     return render_template('query_page.html', records_2 = records_2)
 
@@ -264,6 +268,8 @@ def query_3():
     s_3 = "SELECT * FROM period_5_spanish_2"
     c.execute(s_3)
     records_4 = c.fetchall()
+
+    conn.close()
 
     return render_template('query_page_period_5.html', records_4 = records_4)
 
