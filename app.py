@@ -3,23 +3,10 @@ import psycopg2
 import psycopg2.extras
 app = Flask(__name__)
 
-# TO DO:
-
-# Make photos
-# Duplicate html, update, and query pages
-# CSS
-# Add teachers
-# Add administrators
-# Add back to home button
-# Add delete option
-# Table length?
-# Add advanced queries
-# Add update integer
-
 hostname = 'localhost'
 database = 'Gradebook'
 username = 'postgres'
-pwd = 'Carrotcake2021'
+pwd = '(suuuuuuuuuuuuper secret)'
 port_id = 5432
 conn = None
 cur = None
@@ -200,7 +187,6 @@ def update_2():
 
     return render_template('period_3_Spanish_2_enroll.html', title=title_two)
 
-#
 @app.route('/query_2', methods=['GET'])
 def query_2():
     conn = psycopg2.connect(
@@ -280,6 +266,7 @@ def update_3():
 
     return render_template('period_5_Spanish_2_enroll.html', title=title_two)
 
+#period 5 spanish 2 check class roster
 @app.route('/query_3', methods=['GET'])
 def query_3():
     conn = psycopg2.connect(
@@ -318,7 +305,6 @@ def delete_student_3(id):
 @app.route('/update_period_3_grades', methods=['POST'])
 def update_period_3_grades():
     return render_template('update_period_3_grades.html')
-
 
 @app.route('/update_period_3_grades_button', methods=['POST'])
 def update_period_3_grades_button():
