@@ -6,7 +6,7 @@ app = Flask(__name__)
 hostname = 'localhost'
 database = 'Gradebook'
 username = 'postgres'
-pwd = '(suuuuuuuuuuuuper secret)'
+pwd = '(put password here)'
 port_id = 5432
 conn = None
 cur = None
@@ -124,6 +124,28 @@ def delete_student(id):
     conn.commit()
     return redirect(url_for('main'))
 
+#period_1_spanish_1_update_grade
+@app.route('/period_1_update_grade/<id>', methods = ['POST', 'GET'])
+def period_1_update_grade(id):
+    conn = psycopg2.connect(
+        host=hostname,
+        dbname=database,
+        user=username,
+        password=pwd,
+        port=port_id)
+
+    updated_grade = request.form.get("update grade")
+
+    cur = conn.cursor()
+
+    cur.execute("""UPDATE period_1_spanish_1 
+    SET student_grade = %s 
+    WHERE id = %s""", (updated_grade, id))
+
+    conn.commit()
+
+    return redirect(url_for('main'))
+
 @app.route('/query_regular_verbs_ws_p1', methods=['GET'])
 def query_regular_verbs_ws_p1():
     conn = psycopg2.connect(
@@ -142,7 +164,7 @@ def query_regular_verbs_ws_p1():
     return render_template('regular_verbs_worksheet_period_1.html', records_2=records_2)
 
 #period_3_spanish_1 enroll student
-@app.route('/update_2', methods=['GET'])
+@app.route('/update_2', methods=['POST'])
 def update_2():
     try:
         conn = psycopg2.connect(
