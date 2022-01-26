@@ -31,8 +31,15 @@
                 <td>{{row[5]}}</td>
                 <td>{{row[6]}}</td>
                 <td width="130">
-                    <a href="/edit/{{row[0]}}" class="btn btn-secondary btn-sm">edit</a>
                     <a href="/delete/{{row[0]}}" class="btn btn-danger btn-delete btn-sm">unenroll student</a>
+                    <form action="/period_1_update_grade/{{row[0]}}" method="POST">
+                    <div class="form-group">
+        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+            placeholder="subject" name='update grade' style="width: 200px;">
+                         <button type="submit" class="btn btn-warning">Update grade</button>
+
+</form>
+                        </div>
                 </td>
             </tr>
             {% endfor %}
