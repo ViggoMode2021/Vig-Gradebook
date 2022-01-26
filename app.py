@@ -1,12 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for
 import psycopg2
-import psycopg2.extras
 app = Flask(__name__)
 
 hostname = 'localhost'
 database = 'Gradebook'
 username = 'postgres'
-pwd = '(put password here)'
+pwd = ''
 port_id = 5432
 conn = None
 cur = None
@@ -15,11 +14,6 @@ cur = None
 def main():
     title_two = 'Gradebook main page'
     return render_template('main_page.html', title=title_two)
-
-@app.route('/main_page_2')
-def main_page_2():
-    title_two = 'Gradebook main page'
-    return render_template('main_page_2.html', title=title_two)
 
 @app.route('/period_1_Spanish_1_enroll')
 def period_1_Spanish_1_enroll():
@@ -108,7 +102,7 @@ def query():
 
     return render_template('query_page.html', records_2=records_2)
 
-#period_1_spanish_1_delete_function
+#period_1_spanish_1_delete_student
 @app.route('/delete/<string:id>', methods = ['POST','GET'])
 def delete_student(id):
     conn = psycopg2.connect(
@@ -144,8 +138,9 @@ def period_1_update_grade(id):
 
     conn.commit()
 
-    return redirect(url_for('main'))
+    return redirect(url_for('query'))
 
+#period_1_spanish_1_update_grade_with_worksheet
 @app.route('/query_regular_verbs_ws_p1', methods=['GET'])
 def query_regular_verbs_ws_p1():
     conn = psycopg2.connect(
@@ -163,7 +158,7 @@ def query_regular_verbs_ws_p1():
 
     return render_template('regular_verbs_worksheet_period_1.html', records_2=records_2)
 
-#period_3_spanish_1 enroll student
+#period_3_spanish_2 enroll student
 @app.route('/update_2', methods=['POST'])
 def update_2():
     try:
@@ -209,6 +204,7 @@ def update_2():
 
     return render_template('period_3_Spanish_2_enroll.html', title=title_two)
 
+#period_3_spanish_2 enroll student
 @app.route('/query_2', methods=['GET'])
 def query_2():
     conn = psycopg2.connect(
@@ -241,6 +237,28 @@ def delete_student_2(id):
     cur.execute('DELETE FROM period_3_spanish_2 WHERE id = {0}'.format(id))
     conn.commit()
     return redirect(url_for('main'))
+
+#period_3_spanish_2_update_grade
+@app.route('/period_3_update_grade/<id>', methods = ['POST', 'GET'])
+def period_3_update_grade(id):
+    conn = psycopg2.connect(
+        host=hostname,
+        dbname=database,
+        user=username,
+        password=pwd,
+        port=port_id)
+
+    updated_grade_2 = request.form.get("update grade 2")
+
+    cur = conn.cursor()
+
+    cur.execute("""UPDATE period_3_spanish_2 
+    SET student_grade = %s 
+    WHERE id = %s""", (updated_grade_2, id))
+
+    conn.commit()
+
+    return redirect(url_for('query_2'))
 
 #period_5_spanish_2 show class roster
 @app.route('/update_3', methods=['POST'])
@@ -324,12 +342,9 @@ def delete_student_3(id):
     conn.commit()
     return redirect(url_for('main'))
 
-@app.route('/update_period_3_grades', methods=['POST'])
-def update_period_3_grades():
-    return render_template('update_period_3_grades.html')
-
-@app.route('/update_period_3_grades_button', methods=['POST'])
-def update_period_3_grades_button():
+#period_5_spanish_2_update_grade
+@app.route('/period_5_update_grade/<id>', methods = ['POST', 'GET'])
+def period_5_update_grade(id):
     conn = psycopg2.connect(
         host=hostname,
         dbname=database,
@@ -337,21 +352,17 @@ def update_period_3_grades_button():
         password=pwd,
         port=port_id)
 
+    updated_grade_3 = request.form.get("update grade 3")
+
     cur = conn.cursor()
 
-    last_name_3 = request.form.get("student_last_name")
-    new_grade_3 = request.form.get("student_new_grade")
-
-    period_3_update_grades_query = "UPDATE period_3_spanish_2 SET student_grade = (%s) WHERE student_last_name = (%s)"
-
-    insert_values = [(new_grade_3, last_name_3)]
-
-    for record in insert_values:
-        cur.execute(period_3_update_grades_query, record)
+    cur.execute("""UPDATE period_5_spanish_2 
+    SET student_grade = %s 
+    WHERE id = %s""", (updated_grade_3, id))
 
     conn.commit()
 
-    return render_template('update_period_3_grades.html')
+    return redirect(url_for('query_3'))
 
 if __name__ == "__main__":
     app.run(debug=True)
