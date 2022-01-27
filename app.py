@@ -2,40 +2,41 @@ from flask import Flask, render_template, request, redirect, url_for
 import psycopg2
 app = Flask(__name__)
 
+#Below is the database information
 hostname = 'localhost'
 database = 'Gradebook'
 username = 'postgres'
-pwd = ''
+pwd = 'Carrotcake2021'
 port_id = 5432
 conn = None
 cur = None
 
-@app.route('/')
+@app.route('/') #ROUTING FOR MAIN PAGE
 def main():
     title_two = 'Gradebook main page'
     return render_template('main_page.html', title=title_two)
 
-@app.route('/period_1_Spanish_1_enroll')
+@app.route('/period_1_Spanish_1_enroll') #ROUTING FOR PERIOD 1 SPANISH 1 ENROLL STUDENT PAGE
 def period_1_Spanish_1_enroll():
     title_two = 'enroll or check enrollment'
     return render_template('period_1_Spanish_1_enroll.html', title=title_two)
 
-@app.route('/period_3_Spanish_2_enroll')
+@app.route('/period_3_Spanish_2_enroll') #ROUTING FOR PERIOD 3 SPANISH 2 ENROLL STUDENT PAGE
 def period_3_Spanish_2_enroll():
     title_two = 'enroll or check enrollment'
     return render_template('period_3_Spanish_2_enroll.html', title=title_two)
 
-@app.route('/period_5_Spanish_2_enroll')
+@app.route('/period_5_Spanish_2_enroll') #ROUTING FOR PERIOD 2 SPANISH 2 ENROLL STUDENT PAGE
 def period_5_Spanish_2_enroll():
     title_two = 'enroll or check enrollment'
     return render_template('period_5_Spanish_2_enroll.html', title=title_two)
 
-@app.route('/regular_verbs_worksheet_period_1')
+@app.route('/regular_verbs_worksheet_period_1') 
 def regular_verbs_worksheet_period_1():
     title_two = 'regular_verbs_worksheet_period_1'
     return render_template('regular_verbs_worksheet_period_1.html', title=title_two)
 
-#period_1_spanish_1 enroll student
+#period_1_spanish_1 enroll student #CREATE
 @app.route('/update', methods=['POST'])
 def update():
     try:
@@ -81,7 +82,7 @@ def update():
 
     return render_template('period_1_Spanish_1_enroll.html', title=title_two)
 
-#period_1_spanish_1 show class roster
+#period_1_spanish_1 show class roster #READ
 @app.route('/query', methods=['GET'])
 def query():
     conn = psycopg2.connect(
@@ -102,7 +103,7 @@ def query():
 
     return render_template('query_page.html', records_2=records_2)
 
-#period_1_spanish_1_delete_student
+#period_1_spanish_1_delete_student #DELETE
 @app.route('/delete/<string:id>', methods = ['POST','GET'])
 def delete_student(id):
     conn = psycopg2.connect(
@@ -118,7 +119,7 @@ def delete_student(id):
     conn.commit()
     return redirect(url_for('main'))
 
-#period_1_spanish_1_update_grade
+#period_1_spanish_1_update_grade #UPDATE
 @app.route('/period_1_update_grade/<id>', methods = ['POST', 'GET'])
 def period_1_update_grade(id):
     conn = psycopg2.connect(
@@ -158,7 +159,7 @@ def query_regular_verbs_ws_p1():
 
     return render_template('regular_verbs_worksheet_period_1.html', records_2=records_2)
 
-#period_3_spanish_2 enroll student
+#period_3_spanish_2 enroll student #CREATE
 @app.route('/update_2', methods=['POST'])
 def update_2():
     try:
@@ -204,7 +205,7 @@ def update_2():
 
     return render_template('period_3_Spanish_2_enroll.html', title=title_two)
 
-#period_3_spanish_2 enroll student
+#period_3_spanish_2 enroll student #READ
 @app.route('/query_2', methods=['GET'])
 def query_2():
     conn = psycopg2.connect(
@@ -238,7 +239,7 @@ def delete_student_2(id):
     conn.commit()
     return redirect(url_for('main'))
 
-#period_3_spanish_2_update_grade
+#period_3_spanish_2_update_grade #UPDATE
 @app.route('/period_3_update_grade/<id>', methods = ['POST', 'GET'])
 def period_3_update_grade(id):
     conn = psycopg2.connect(
@@ -260,7 +261,7 @@ def period_3_update_grade(id):
 
     return redirect(url_for('query_2'))
 
-#period_5_spanish_2 show class roster
+#period_5_spanish_2 show class roster #UPDATE
 @app.route('/update_3', methods=['POST'])
 def update_3():
     try:
@@ -306,7 +307,7 @@ def update_3():
 
     return render_template('period_5_Spanish_2_enroll.html', title=title_two)
 
-#period 5 spanish 2 check class roster
+#period 5 spanish 2 check class roster #READ
 @app.route('/query_3', methods=['GET'])
 def query_3():
     conn = psycopg2.connect(
@@ -326,7 +327,7 @@ def query_3():
 
     return render_template('query_page_period_5.html', records_4=records_4)
 
-#period_5_spanish_2_delete_function
+#period_5_spanish_2_delete_function #DELETE
 @app.route('/delete_student_3/<string:id>', methods = ['POST','GET'])
 def delete_student_3(id):
     conn = psycopg2.connect(
@@ -342,7 +343,7 @@ def delete_student_3(id):
     conn.commit()
     return redirect(url_for('main'))
 
-#period_5_spanish_2_update_grade
+#period_5_spanish_2_update_grade #UPDATE
 @app.route('/period_5_update_grade/<id>', methods = ['POST', 'GET'])
 def period_5_update_grade(id):
     conn = psycopg2.connect(
