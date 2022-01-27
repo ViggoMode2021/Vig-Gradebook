@@ -54,24 +54,6 @@ CREATE TABLE Period_5_Spanish_2(
 	student_graduation_year INT NOT NULL,
 	student_grade INT NOT NULL);
 
-CREATE TABLE Period_6_Spanish_1(
-	id SERIAL PRIMARY KEY,
-	subject TEXT NOT NULL,
-	teacher TEXT NOT NULL,
-	student_first_name TEXT NOT NULL,
-	student_last_name TEXT NOT NULL,
-	student_graduation_year INT NOT NULL,
-	student_grade INT NOT NULL);
-
-CREATE TABLE Period_7_Spanish_1(
-	id SERIAL PRIMARY KEY,
-	subject TEXT NOT NULL,
-	teacher TEXT NOT NULL,
-	student_first_name TEXT NOT NULL,
-	student_last_name TEXT NOT NULL,
-	student_graduation_year INT NOT NULL,
-	student_grade INT NOT NULL);
-
 INSERT INTO period_3_spanish_2(subject, teacher, student_first_name, student_last_name, student_graduation_year, student_grade)
 VALUES ('Spanish 2', 'Viglione', 'Tom', 'Numan', 2023, 60),
        ('Spanish 2', 'Viglione', 'John', 'Jenkins', 2023, 90),
