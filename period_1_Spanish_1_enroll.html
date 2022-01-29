@@ -1,4 +1,3 @@
-{% block title %}{{title}}{% endblock %}
 
 {% block content %}
 
@@ -14,34 +13,36 @@
   <a href="{{url_for('period_5_Spanish_2_enroll')}}">Period 5 Spanish 2</a>
 </div>
 
+<h1>Enroll or check enrollment - P.1 Spanish 1</h1>
+
 <form action="/update" method="POST">
     <div class="form-group">
-        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+        <input type="text" class="form-control" id="exampleInputEmail1" style="width: 150px;" aria-describedby="emailHelp"
             placeholder="subject" name='subject' style="width: 200px;">
     </div>
 
     <div class="form-group">
-        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+        <input type="text" class="form-control" id="exampleInputEmail1" style="width: 150px;" aria-describedby="emailHelp"
             placeholder="teacher" name='teacher' style="width: 200px;">
     </div>
 
     <div class="form-group">
-        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+        <input type="text" class="form-control" id="exampleInputEmail1" style="width: 150px;" aria-describedby="emailHelp"
             placeholder="first name" name='first name' style="width: 200px;">
     </div>
 
     <div class="form-group">
-        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+        <input type="text" class="form-control" id="exampleInputEmail1" style="width: 150px;" aria-describedby="emailHelp"
             placeholder="last name" name='last name' style="width: 200px;">
     </div>
 
     <div class="form-group">
-        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+        <input type="text" class="form-control" id="exampleInputEmail1" style="width: 150px;" aria-describedby="emailHelp"
             placeholder="graduation year" name='graduation year' style="width: 200px;">
     </div>
 
     <div class="form-group">
-        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="grade"
+        <input type="text" class="form-control" id="exampleInputEmail1" style="width: 150px;" aria-describedby="emailHelp" placeholder="grade"
             name='grade' style="width: 200px;">
     </div>
 
@@ -57,8 +58,5 @@
 <form action="/query_regular_verbs_ws_p1" method="POST">
     <button type="submit" class="btn btn-warning">Regular verbs worksheet (input scores)</button>
 </form>
-
-<a href="{{url_for('main')}}">
-    <img src="static/images/back.png" width="300">
 
 {% endblock %}
