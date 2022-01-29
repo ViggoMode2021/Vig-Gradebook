@@ -18,23 +18,19 @@ def main():
 
 @app.route('/period_1_Spanish_1_enroll') #ROUTING FOR PERIOD 1 SPANISH 1 ENROLL STUDENT PAGE
 def period_1_Spanish_1_enroll():
-    title_two = 'enroll or check enrollment'
-    return render_template('period_1_Spanish_1_enroll.html', title=title_two)
+    return render_template('period_1_Spanish_1_enroll.html')
 
 @app.route('/period_3_Spanish_2_enroll') #ROUTING FOR PERIOD 3 SPANISH 2 ENROLL STUDENT PAGE
 def period_3_Spanish_2_enroll():
-    title_two = 'enroll or check enrollment'
-    return render_template('period_3_Spanish_2_enroll.html', title=title_two)
+    return render_template('period_3_Spanish_2_enroll.html')
 
 @app.route('/period_5_Spanish_2_enroll') #ROUTING FOR PERIOD 2 SPANISH 2 ENROLL STUDENT PAGE
 def period_5_Spanish_2_enroll():
-    title_two = 'enroll or check enrollment'
-    return render_template('period_5_Spanish_2_enroll.html', title=title_two)
+    return render_template('period_5_Spanish_2_enroll.html')
 
-@app.route('/regular_verbs_worksheet_period_1') 
+@app.route('/regular_verbs_worksheet_period_1')
 def regular_verbs_worksheet_period_1():
-    title_two = 'regular_verbs_worksheet_period_1'
-    return render_template('regular_verbs_worksheet_period_1.html', title=title_two)
+    return render_template('regular_verbs_worksheet_period_1.html')
 
 #period_1_spanish_1 enroll student #CREATE
 @app.route('/update', methods=['POST'])
@@ -58,9 +54,6 @@ def update():
         graduation_year = request.form.get("graduation year")
         grade = request.form.get("grade")
 
-        # This title appears once the enroll button is hit.
-        title_two = "Period 1 Spanish 1 enroll or check enrollment"
-
         insert_values = [(subject, teacher, first_name,
                           last_name, graduation_year, grade)]
 
@@ -80,7 +73,7 @@ def update():
         if conn is not None:
             conn.close()
 
-    return render_template('period_1_Spanish_1_enroll.html', title=title_two)
+    return render_template('period_1_Spanish_1_enroll.html')
 
 #period_1_spanish_1 show class roster #READ
 @app.route('/query', methods=['GET'])
@@ -182,7 +175,6 @@ def update_2():
         grade_2 = request.form.get("grade_2")
 
         # This title appears once the enroll button is hit.
-        title_two = "Period 3 Spanish 2 enroll or check enrollment"
 
         insert_values_2 = [(subject_2, teacher_2, first_name_2,
                             last_name_2, graduation_year_2, grade_2)]
@@ -203,7 +195,7 @@ def update_2():
         if conn is not None:
             conn.close()
 
-    return render_template('period_3_Spanish_2_enroll.html', title=title_two)
+    return render_template('period_3_Spanish_2_enroll.html')
 
 #period_3_spanish_2 enroll student #READ
 @app.route('/query_2', methods=['GET'])
@@ -283,9 +275,6 @@ def update_3():
         graduation_year_3 = request.form.get("graduation year_3")
         grade_3 = request.form.get("grade_3")
 
-        # This title appears once the enroll button is hit.
-        title_two = "Period 5 Spanish 2 enroll or check enrollment"
-
         insert_values_3 = [(subject_3, teacher_3, first_name_3,
                             last_name_3, graduation_year_3, grade_3)]
 
@@ -305,7 +294,7 @@ def update_3():
         if conn is not None:
             conn.close()
 
-    return render_template('period_5_Spanish_2_enroll.html', title=title_two)
+    return render_template('period_5_Spanish_2_enroll.html')
 
 #period 5 spanish 2 check class roster #READ
 @app.route('/query_3', methods=['GET'])
