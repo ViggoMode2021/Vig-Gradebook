@@ -174,8 +174,6 @@ def update_2():
         graduation_year_2 = request.form.get("graduation year_2")
         grade_2 = request.form.get("grade_2")
 
-        # This title appears once the enroll button is hit.
-
         insert_values_2 = [(subject_2, teacher_2, first_name_2,
                             last_name_2, graduation_year_2, grade_2)]
 
