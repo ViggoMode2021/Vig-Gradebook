@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 import psycopg2
 app = Flask(__name__)
 
@@ -110,7 +110,7 @@ def delete_student(id):
 
     cur.execute('DELETE FROM period_1_spanish_1 WHERE id = {0}'.format(id))
     conn.commit()
-    return redirect(url_for('main'))
+    return redirect(url_for('query_page'))
 
 #period_1_spanish_1_update_grade #UPDATE
 @app.route('/period_1_update_grade/<id>', methods = ['POST', 'GET'])
@@ -133,24 +133,6 @@ def period_1_update_grade(id):
     conn.commit()
 
     return redirect(url_for('query'))
-
-#period_1_spanish_1_update_grade_with_worksheet
-@app.route('/query_regular_verbs_ws_p1', methods=['GET'])
-def query_regular_verbs_ws_p1():
-    conn = psycopg2.connect(
-        host=hostname,
-        dbname=database,
-        user=username,
-        password=pwd,
-        port=port_id)
-
-    c = conn.cursor()
-
-    s = "SELECT * FROM period_1_spanish_1"
-    c.execute(s)
-    records_2 = c.fetchall()
-
-    return render_template('regular_verbs_worksheet_period_1.html', records_2=records_2)
 
 #period_3_spanish_2 enroll student #CREATE
 @app.route('/update_2', methods=['POST'])
@@ -227,7 +209,7 @@ def delete_student_2(id):
 
     cur.execute('DELETE FROM period_3_spanish_2 WHERE id = {0}'.format(id))
     conn.commit()
-    return redirect(url_for('main'))
+    return redirect(url_for('query_page_period_3'))
 
 #period_3_spanish_2_update_grade #UPDATE
 @app.route('/period_3_update_grade/<id>', methods = ['POST', 'GET'])
@@ -249,7 +231,7 @@ def period_3_update_grade(id):
 
     conn.commit()
 
-    return redirect(url_for('query_2'))
+    return redirect(url_for('main'))
 
 #period_5_spanish_2 show class roster #UPDATE
 @app.route('/update_3', methods=['POST'])
