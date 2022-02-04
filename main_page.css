@@ -10,6 +10,18 @@ h1{
     font-size: 40px;
 }
 
+h5{
+    color: green;
+    font-family: courier;
+    font-size: 25px;
+}
+
+p{
+    color: purple;
+    font-family: calibri;
+    font-size: 20px;
+}
+
 .topnav {
   background-color: #333;
   overflow: hidden;
