@@ -110,7 +110,7 @@ def delete_student(id):
 
     cur.execute('DELETE FROM period_1_spanish_1 WHERE id = {0}'.format(id))
     conn.commit()
-    return redirect(url_for('query_page'))
+    return redirect(url_for('query'))
 
 #period_1_spanish_1_update_grade #UPDATE
 @app.route('/period_1_update_grade/<id>', methods = ['POST', 'GET'])
@@ -209,7 +209,7 @@ def delete_student_2(id):
 
     cur.execute('DELETE FROM period_3_spanish_2 WHERE id = {0}'.format(id))
     conn.commit()
-    return redirect(url_for('query_page_period_3'))
+    return redirect(url_for('query_2'))
 
 #period_3_spanish_2_update_grade #UPDATE
 @app.route('/period_3_update_grade/<id>', methods = ['POST', 'GET'])
@@ -310,7 +310,7 @@ def delete_student_3(id):
 
     cur.execute('DELETE FROM period_5_spanish_2 WHERE id = {0}'.format(id))
     conn.commit()
-    return redirect(url_for('main'))
+    return redirect(url_for('query_3'))
 
 #period_5_spanish_2_update_grade #UPDATE
 @app.route('/period_5_update_grade/<id>', methods = ['POST', 'GET'])
