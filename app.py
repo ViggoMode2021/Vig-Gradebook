@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for
 import psycopg2
 app = Flask(__name__)
 
@@ -6,7 +6,8 @@ app = Flask(__name__)
 hostname = 'localhost'
 database = 'Gradebook'
 username = 'postgres'
-pwd = ''
+pwd = '' #This won't be shared. Teachers and students of NuCamp that wish
+# to replicate this database should view the README for more information. Thank you.
 port_id = 5432
 conn = None
 cur = None
@@ -97,7 +98,7 @@ def query():
     return render_template('query_page.html', records_2=records_2)
 
 #period_1_spanish_1_delete_student #DELETE
-@app.route('/delete/<string:id>', methods = ['POST','GET'])
+@app.route('/delete/<string:id>', methods = ['DELETE', 'GET'])
 def delete_student(id):
     conn = psycopg2.connect(
         host=hostname,
@@ -110,10 +111,12 @@ def delete_student(id):
 
     cur.execute('DELETE FROM period_1_spanish_1 WHERE id = {0}'.format(id))
     conn.commit()
+    s = "SELECT * FROM period_1_spanish_1"
+    cur.execute(s)
     return redirect(url_for('query'))
 
 #period_1_spanish_1_update_grade #UPDATE
-@app.route('/period_1_update_grade/<id>', methods = ['POST', 'GET'])
+@app.route('/period_1_update_grade/<id>', methods = ['PATCH', 'GET', 'POST'])
 def period_1_update_grade(id):
     conn = psycopg2.connect(
         host=hostname,
@@ -132,6 +135,8 @@ def period_1_update_grade(id):
 
     conn.commit()
 
+    s = "SELECT * FROM period_1_spanish_1"
+    cur.execute(s)
     return redirect(url_for('query'))
 
 #period_3_spanish_2 enroll student #CREATE
@@ -196,7 +201,7 @@ def query_2():
     return render_template('query_page_period_3.html', records_3=records_3)
 
 #period_3_spanish_2_delete_function
-@app.route('/delete_student_2/<string:id>', methods = ['POST','GET'])
+@app.route('/delete_student_2/<string:id>', methods = ['DELETE','GET'])
 def delete_student_2(id):
     conn = psycopg2.connect(
         host=hostname,
@@ -209,10 +214,12 @@ def delete_student_2(id):
 
     cur.execute('DELETE FROM period_3_spanish_2 WHERE id = {0}'.format(id))
     conn.commit()
+    s = "SELECT * FROM period_1_spanish_1"
+    cur.execute(s)
     return redirect(url_for('query_2'))
 
 #period_3_spanish_2_update_grade #UPDATE
-@app.route('/period_3_update_grade/<id>', methods = ['POST', 'GET'])
+@app.route('/period_3_update_grade/<id>', methods = ['PATCH', 'GET', 'POST'])
 def period_3_update_grade(id):
     conn = psycopg2.connect(
         host=hostname,
@@ -230,6 +237,9 @@ def period_3_update_grade(id):
     WHERE id = %s""", (updated_grade_2, id))
 
     conn.commit()
+
+    s = "SELECT * FROM period_1_spanish_1"
+    cur.execute(s)
 
     return redirect(url_for('main'))
 
@@ -310,10 +320,12 @@ def delete_student_3(id):
 
     cur.execute('DELETE FROM period_5_spanish_2 WHERE id = {0}'.format(id))
     conn.commit()
+    s = "SELECT * FROM period_5_spanish_2"
+    cur.execute(s)
     return redirect(url_for('query_3'))
 
 #period_5_spanish_2_update_grade #UPDATE
-@app.route('/period_5_update_grade/<id>', methods = ['POST', 'GET'])
+@app.route('/period_5_update_grade/<id>', methods = ['PATCH', 'GET', 'POST'])
 def period_5_update_grade(id):
     conn = psycopg2.connect(
         host=hostname,
@@ -331,6 +343,9 @@ def period_5_update_grade(id):
     WHERE id = %s""", (updated_grade_3, id))
 
     conn.commit()
+
+    s = "SELECT * FROM period_1_spanish_1"
+    cur.execute(s)
 
     return redirect(url_for('query_3'))
 
