@@ -1,7 +1,7 @@
 body{
-    background: #FC354C;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #6dd5ed, #2193b0);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #6dd5ed, #2193b0); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: #FC354C;
+    background: -webkit-linear-gradient(to right, #6dd5ed, #2193b0);
+    background: linear-gradient(to right, #6dd5ed, #2193b0);
 }
 
 input {
@@ -14,9 +14,9 @@ input {
     cursor: pointer;
   }
   
-  body{period_1_Spanish_1_enroll.css
+  body{
       background: rgb(34,193,195);
-      background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%);
+      background-image: linear-gradient(to right, red , yellow);
   }
 
 .topnav {
@@ -44,8 +44,7 @@ input {
 }
 
 h1{
-    color: blue;
+    color: white;
     font-family: calibri;
     font-size: 40px;
 }
-
