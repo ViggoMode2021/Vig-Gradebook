@@ -8,9 +8,8 @@ input {
     cursor: pointer;
   }
   
-  body{period_1_Spanish_1_enroll.css
-      background: rgb(34,193,195);
-      background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%);
+  body{
+  background: linear-gradient(70deg, blue, pink);
   }
 
 .topnav {
@@ -38,8 +37,7 @@ input {
 }
 
 h1{
-    color: blue;
+    color: black;
     font-family: calibri;
     font-size: 40px;
 }
-
