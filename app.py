@@ -7,7 +7,7 @@ hostname = 'localhost'
 database = 'Gradebook'
 username = 'postgres'
 pwd = '' #This won't be shared. Teachers and students of NuCamp that wish
-# to replicate this database should view the README for more information. Thank you.
+# to replicate this database should view README.md for more information. Thank you.
 port_id = 5432
 conn = None
 cur = None
@@ -113,6 +113,7 @@ def delete_student(id):
     conn.commit()
     s = "SELECT * FROM period_1_spanish_1"
     cur.execute(s)
+    conn.close()
     return redirect(url_for('query'))
 
 #period_1_spanish_1_update_grade #UPDATE
@@ -137,7 +138,29 @@ def period_1_update_grade(id):
 
     s = "SELECT * FROM period_1_spanish_1"
     cur.execute(s)
+    conn.close()
     return redirect(url_for('query'))
+
+#period_1_spanish_edit_assignment_grades
+@app.route('/assignment', methods=['GET', 'POST'])
+def assignment():
+    conn = psycopg2.connect(
+        host=hostname,
+        dbname=database,
+        user=username,
+        password=pwd,
+        port=port_id)
+
+    c = conn.cursor()
+
+    s = "SELECT * FROM assignments_period_1_spanish_1"
+    c.execute(s)
+    assignment_1 = c.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    return render_template('assignment.html', assignment_1 = assignment_1)
 
 #period_3_spanish_2 enroll student #CREATE
 @app.route('/update_2', methods=['POST'])
@@ -198,6 +221,8 @@ def query_2():
     c.execute(s_2)
     records_3 = c.fetchall()
 
+    conn.close()
+
     return render_template('query_page_period_3.html', records_3=records_3)
 
 #period_3_spanish_2_delete_function
@@ -216,6 +241,7 @@ def delete_student_2(id):
     conn.commit()
     s = "SELECT * FROM period_1_spanish_1"
     cur.execute(s)
+    conn.close()
     return redirect(url_for('query_2'))
 
 #period_3_spanish_2_update_grade #UPDATE
@@ -240,6 +266,8 @@ def period_3_update_grade(id):
 
     s = "SELECT * FROM period_1_spanish_1"
     cur.execute(s)
+
+    conn.close()
 
     return redirect(url_for('main'))
 
@@ -322,6 +350,7 @@ def delete_student_3(id):
     conn.commit()
     s = "SELECT * FROM period_5_spanish_2"
     cur.execute(s)
+    conn.close()
     return redirect(url_for('query_3'))
 
 #period_5_spanish_2_update_grade #UPDATE
@@ -346,6 +375,8 @@ def period_5_update_grade(id):
 
     s = "SELECT * FROM period_1_spanish_1"
     cur.execute(s)
+
+    conn.close()
 
     return redirect(url_for('query_3'))
 
