@@ -162,6 +162,132 @@ def assignment():
 
     return render_template('assignment.html', assignment_1 = assignment_1)
 
+#period_1_spanish_1
+@app.route('/new_assignment', methods=['POST'])
+def new_assignment():
+    try:
+        conn = psycopg2.connect(
+            host=hostname,
+            dbname=database,
+            user=username,
+            password=pwd,
+            port=port_id)
+
+        cur = conn.cursor()
+
+        insert_script = "INSERT INTO assignments_period_1_spanish_1_for_real(assignment_name, category, due_date, overall_points) VALUES (%s, %s, %s, %s)"
+
+        assignment_name = request.form.get("assignment name")
+        category = request.form.get("category")
+        due_date = request.form.get("due date")
+        overall_points = request.form.get("max points")
+
+        insert_values = [(assignment_name, category, due_date,
+                          overall_points)]
+
+        for record in insert_values:
+            cur.execute(insert_script, record)
+
+        a_2 = """ALTER TABLE period_1_spanish_1 ADD COLUMN IF NOT EXISTS assignment_id INT"""
+
+        cur.execute(a_2)
+        insert_script_2 = "INSERT INTO period_1_spanish_1(assignment_id) SET assignment_id = (%s)"
+        assignment_name = request.form.get("assignment id")
+        cur.execute(insert_script_2, assignment_name)
+        cur.execute("""ALTER TABLE period_1_spanish_1 ADD COLUMN IF NOT EXISTS assignment_name TEXT""")
+        cur.execute("""ALTER TABLE period_1_spanish_1 ADD COLUMN IF NOT EXISTS assignment_1_grade INT""")
+
+
+        conn.commit()
+
+    finally:
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            conn.close()
+
+    return render_template('assignment.html')
+
+#period_1_spanish_1
+@app.route('/new_assignment_update', methods=['GET'])
+def new_assignment_update():
+    try:
+        conn = psycopg2.connect(
+            host=hostname,
+            dbname=database,
+            user=username,
+            password=pwd,
+            port=port_id)
+
+        cur = conn.cursor()
+
+        s = 'SELECT * FROM assignments_period_1_spanish_1_for_real'
+        cur.execute(s)
+        assignment_titles = cur.fetchall()
+
+    except Exception as error:
+        print(error)
+    finally:
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            conn.close()
+
+    return render_template('assignment.html', assignment_titles = assignment_titles)
+
+#period_1_spanish_1
+@app.route('/edit_assignment_grade/<string:id>', methods=['GET'])
+def edit_assignment_grade(id):
+    try:
+        conn = psycopg2.connect(
+            host=hostname,
+            dbname=database,
+            user=username,
+            password=pwd,
+            port=port_id)
+
+        cur = conn.cursor()
+
+        s = 'SELECT * FROM assignments_period_1_spanish_1_for_real WHERE id = {0}'.format(id)
+        cur.execute(s)
+        assignment_titles = cur.fetchall()
+
+    except Exception as error:
+        print(error)
+    finally:
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            conn.close()
+
+    return render_template('edit_assignment_grade.html', assignment_titles = assignment_titles)
+
+@app.route('/period_1_update_assignment_grade/<string:id>', methods=['POST'])
+def period_1_update_assignment_grade(id):
+    try:
+        conn = psycopg2.connect(
+            host=hostname,
+            dbname=database,
+            user=username,
+            password=pwd,
+            port=port_id)
+
+        cur = conn.cursor()
+
+        s = 'SELECT * FROM assignments_period_1_spanish_1_for_real WHERE id = {0}'.format(id)
+        cur.execute(s)
+        assignment_titles = cur.fetchall()
+
+    except Exception as error:
+        print(error)
+    finally:
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            conn.close()
+
+    return render_template('edit_assignment_grade.html', assignment_titles = assignment_titles)
+
 #period_3_spanish_2 enroll student #CREATE
 @app.route('/update_2', methods=['POST'])
 def update_2():
