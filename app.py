@@ -162,7 +162,7 @@ def assignment():
 
     return render_template('assignment.html', assignment_1 = assignment_1)
 
-#period_1_spanish_1
+#period_1_spanish_1_new_assignment_creation
 @app.route('/new_assignment', methods=['POST'])
 def new_assignment():
     try:
@@ -196,7 +196,6 @@ def new_assignment():
         cur.execute(insert_script_2, assignment_name)
         cur.execute("""ALTER TABLE period_1_spanish_1 ADD COLUMN IF NOT EXISTS assignment_name TEXT""")
         cur.execute("""ALTER TABLE period_1_spanish_1 ADD COLUMN IF NOT EXISTS assignment_1_grade INT""")
-
 
         conn.commit()
 
@@ -235,7 +234,7 @@ def new_assignment_update():
 
     return render_template('assignment.html', assignment_titles = assignment_titles)
 
-#period_1_spanish_1
+#period_1_spanish_1_edit_assignment_grade_page_route
 @app.route('/edit_assignment_grade/<string:id>', methods=['GET'])
 def edit_assignment_grade(id):
     try:
