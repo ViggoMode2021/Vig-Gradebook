@@ -12,6 +12,16 @@
    <a href="{{url_for('period_1_Spanish_1_enroll')}}">Period 1 Spanish 1</a>
    <a href="{{url_for('period_3_Spanish_2_enroll')}}">Period 3 Spanish 2</a>
   <a href="{{url_for('period_5_Spanish_2_enroll')}}">Period 5 Spanish 2</a>
+           <div class="dropdown">
+  <button class="dropbtn">Sort by:</button>
+  <div class="dropdown-content">
+    <a href="/alphabetically_p1">Last name</a>
+    <a href="/alphabetically_first_p1">First name</a>
+    <a href="/grade_ASC_p1">Grade (low - high)</a>
+      <a href="/grade_DESC_p1">Grade (high - low)</a>
+  </div>
+</div>
+
 </div>
 
 <h8>Period 1 Spanish 1 class roster & gradebook</h8>
@@ -61,4 +71,10 @@
 <form action="/assignment" method="GET">
     <button type="submit" class="btn btn-warning">Edit assignment #1 grades for this class</button>
 </form>
+
+<form action="/grade_DESC_p1" method="GET">
+    <button type="submit" class="btn btn-success">Sort by grades (highest - lowest) </button>
+</form>
+
+
 {% endblock %}
