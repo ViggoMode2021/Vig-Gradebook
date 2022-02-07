@@ -97,6 +97,90 @@ def query():
 
     return render_template('query_page.html', records_2=records_2)
 
+#period_1_sort_last_name_alphabetically
+@app.route('/alphabetically_p1', methods=['GET'])
+def alphabetically_p1():
+    conn = psycopg2.connect(
+        host=hostname,
+        dbname=database,
+        user=username,
+        password=pwd,
+        port=port_id)
+
+    c = conn.cursor()
+
+    s = "SELECT * FROM period_1_spanish_1 ORDER BY student_last_name ASC"
+    c.execute(s)
+    records_2 = c.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    return render_template('query_page.html', records_2=records_2)
+
+#period_1_sort_first_name_alphabetically
+@app.route('/alphabetically_first_p1', methods=['GET'])
+def alphabetically_first_p1():
+    conn = psycopg2.connect(
+        host=hostname,
+        dbname=database,
+        user=username,
+        password=pwd,
+        port=port_id)
+
+    c = conn.cursor()
+
+    s = "SELECT * FROM period_1_spanish_1 ORDER BY student_first_name ASC"
+    c.execute(s)
+    records_2 = c.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    return render_template('query_page.html', records_2=records_2)
+
+#period_1_sort_grade_ascending
+@app.route('/grade_ASC_p1', methods=['GET'])
+def grade_ASC_p1():
+    conn = psycopg2.connect(
+        host=hostname,
+        dbname=database,
+        user=username,
+        password=pwd,
+        port=port_id)
+
+    c = conn.cursor()
+
+    s = "SELECT * FROM period_1_spanish_1 ORDER BY student_grade ASC"
+    c.execute(s)
+    records_2 = c.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    return render_template('query_page.html', records_2=records_2)
+
+#period_1_sort_grade_descending
+@app.route('/grade_DESC_p1', methods=['GET'])
+def grade_DESC_p1():
+    conn = psycopg2.connect(
+        host=hostname,
+        dbname=database,
+        user=username,
+        password=pwd,
+        port=port_id)
+
+    c = conn.cursor()
+
+    s = "SELECT * FROM period_1_spanish_1 ORDER BY student_grade DESC"
+    c.execute(s)
+    records_2 = c.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    return render_template('query_page.html', records_2=records_2)
+
 #period_1_spanish_1_delete_student #DELETE
 @app.route('/delete/<string:id>', methods = ['DELETE', 'GET'])
 def delete_student(id):
