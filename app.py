@@ -275,11 +275,11 @@ def new_assignment():
         a_2 = """ALTER TABLE period_1_spanish_1 ADD COLUMN IF NOT EXISTS assignment_id INT"""
 
         cur.execute(a_2)
-        insert_script_2 = "INSERT INTO period_1_spanish_1(assignment_id) SET assignment_id = (%s)"
-        assignment_name = request.form.get("assignment id")
-        cur.execute(insert_script_2, assignment_name)
         cur.execute("""ALTER TABLE period_1_spanish_1 ADD COLUMN IF NOT EXISTS assignment_name TEXT""")
         cur.execute("""ALTER TABLE period_1_spanish_1 ADD COLUMN IF NOT EXISTS assignment_1_grade INT""")
+        assignment_id = request.form.get("assignment id")
+        assignment_name = request.form.get("assignment name")
+        cur.execute("INSERT INTO period_1_spanish_1(assignment_id, assignment_name) VALUES (%s, %s)", (assignment_id, assignment_name))
 
         conn.commit()
 
@@ -430,6 +430,90 @@ def query_2():
     c.execute(s_2)
     records_3 = c.fetchall()
 
+    conn.close()
+
+    return render_template('query_page_period_3.html', records_3=records_3)
+
+#period_3_sort_last_name_alphabetically
+@app.route('/alphabetically_p3', methods=['GET'])
+def alphabetically_p3():
+    conn = psycopg2.connect(
+        host=hostname,
+        dbname=database,
+        user=username,
+        password=pwd,
+        port=port_id)
+
+    c = conn.cursor()
+
+    s = "SELECT * FROM period_3_spanish_2 ORDER BY student_last_name ASC"
+    c.execute(s)
+    records_3 = c.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    return render_template('query_page_period_3.html', records_3=records_3)
+
+#period_3_sort_first_name_alphabetically
+@app.route('/alphabetically_first_p3', methods=['GET'])
+def alphabetically_first_p3():
+    conn = psycopg2.connect(
+        host=hostname,
+        dbname=database,
+        user=username,
+        password=pwd,
+        port=port_id)
+
+    c = conn.cursor()
+
+    s = "SELECT * FROM period_3_spanish_2 ORDER BY student_first_name ASC"
+    c.execute(s)
+    records_3 = c.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    return render_template('query_page_period_3.html', records_3=records_3)
+
+#period_1_sort_grade_ascending
+@app.route('/grade_ASC_p3', methods=['GET'])
+def grade_ASC_p3():
+    conn = psycopg2.connect(
+        host=hostname,
+        dbname=database,
+        user=username,
+        password=pwd,
+        port=port_id)
+
+    c = conn.cursor()
+
+    s = "SELECT * FROM period_3_spanish_2 ORDER BY student_grade ASC"
+    c.execute(s)
+    records_3 = c.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    return render_template('query_page_period_3.html', records_3=records_3)
+
+#period_3_sort_grade_descending
+@app.route('/grade_DESC_p3', methods=['GET'])
+def grade_DESC_p3():
+    conn = psycopg2.connect(
+        host=hostname,
+        dbname=database,
+        user=username,
+        password=pwd,
+        port=port_id)
+
+    c = conn.cursor()
+
+    s = "SELECT * FROM period_3_spanish_2 ORDER BY student_grade DESC"
+    c.execute(s)
+    records_3 = c.fetchall()
+
+    conn.commit()
     conn.close()
 
     return render_template('query_page_period_3.html', records_3=records_3)
