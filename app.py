@@ -353,9 +353,24 @@ def edit_assignment_grade_2(id):
 
         cur = conn.cursor()
 
-        s = 'SELECT * FROM assignments_period_1_spanish_1_for_real WHERE id = {0}'.format(id)
+        grade_assignment = request.form.get("grade_assignment")
+
+        cur = conn.cursor()
+
+        cur.execute("""UPDATE period_1_spanish_1 
+        SET student_grade = %s/100
+        WHERE id = %s""", (grade_assignment, id))
+
+        conn.commit()
+
+        s = "SELECT * FROM period_1_spanish_1"
         cur.execute(s)
-        assignment_titles = cur.fetchall()
+
+        cur.execute("""INSERT INTO assignments_period_1_spanish_1_results
+        (score, student_id, assignment_id) VALUES (%s, %s, %s) 
+        """, (grade_assignment, id))
+
+        conn.commit()
 
     except Exception as error:
         print(error)
@@ -365,7 +380,7 @@ def edit_assignment_grade_2(id):
         if conn is not None:
             conn.close()
 
-    return render_template('edit_assignment_grade.html', assignment_titles = assignment_titles)
+    return render_template('edit_assignment_grade.html', grade_assignment = grade_assignment)
 
 @app.route('/period_1_update_assignment_grade/<string:id>', methods=['POST'])
 def period_1_update_assignment_grade(id):
@@ -648,7 +663,6 @@ def query_3():
     conn.close()
 
     return render_template('query_page_period_5.html', records_4=records_4)
-
 
 #period_5_sort_last_name_alphabetically
 @app.route('/alphabetically_p5', methods=['GET'])
