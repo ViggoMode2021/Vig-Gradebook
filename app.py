@@ -272,15 +272,6 @@ def new_assignment():
         for record in insert_values:
             cur.execute(insert_script, record)
 
-        a_2 = """ALTER TABLE period_1_spanish_1 ADD COLUMN IF NOT EXISTS assignment_id INT"""
-
-        cur.execute(a_2)
-        cur.execute("""ALTER TABLE period_1_spanish_1 ADD COLUMN IF NOT EXISTS assignment_name TEXT""")
-        cur.execute("""ALTER TABLE period_1_spanish_1 ADD COLUMN IF NOT EXISTS assignment_1_grade INT""")
-        assignment_id = request.form.get("assignment id")
-        assignment_name = request.form.get("assignment name")
-        cur.execute("INSERT INTO period_1_spanish_1(assignment_id, assignment_name) VALUES (%s, %s)", (assignment_id, assignment_name))
-
         conn.commit()
 
     finally:
@@ -321,6 +312,37 @@ def new_assignment_update():
 #period_1_spanish_1_edit_assignment_grade_page_route
 @app.route('/edit_assignment_grade/<string:id>', methods=['GET'])
 def edit_assignment_grade(id):
+    try:
+        conn = psycopg2.connect(
+            host=hostname,
+            dbname=database,
+            user=username,
+            password=pwd,
+            port=port_id)
+
+        cur = conn.cursor()
+
+        s = 'SELECT assignment_name FROM assignments_period_1_spanish_1_for_real WHERE id = {0}'.format(id)
+        cur.execute(s)
+        records_2 = cur.fetchall()
+
+        s_2 = "SELECT * FROM period_1_spanish_1"
+        cur.execute(s_2)
+        records_3 = cur.fetchall()
+
+    except Exception as error:
+        print(error)
+    finally:
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            conn.close()
+
+    return render_template('edit_assignment_grade.html', records_2 = records_2, records_3 = records_3)
+
+#period_1_spanish_1_edit_assignment_grade_page_route
+@app.route('/edit_assignment_grade_2/<string:id>', methods=['POST','GET'])
+def edit_assignment_grade_2(id):
     try:
         conn = psycopg2.connect(
             host=hostname,
@@ -626,6 +648,91 @@ def query_3():
     conn.close()
 
     return render_template('query_page_period_5.html', records_4=records_4)
+
+
+#period_5_sort_last_name_alphabetically
+@app.route('/alphabetically_p5', methods=['GET'])
+def alphabetically_p5():
+    conn = psycopg2.connect(
+        host=hostname,
+        dbname=database,
+        user=username,
+        password=pwd,
+        port=port_id)
+
+    c = conn.cursor()
+
+    s = "SELECT * FROM period_5_spanish_2 ORDER BY student_last_name ASC"
+    c.execute(s)
+    records_4 = c.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    return render_template('query_page.html', records_4=records_4)
+
+#period_5_sort_first_name_alphabetically
+@app.route('/alphabetically_first_p5', methods=['GET'])
+def alphabetically_first_p5():
+    conn = psycopg2.connect(
+        host=hostname,
+        dbname=database,
+        user=username,
+        password=pwd,
+        port=port_id)
+
+    c = conn.cursor()
+
+    s = "SELECT * FROM period_5_spanish_2 ORDER BY student_first_name ASC"
+    c.execute(s)
+    records_4 = c.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    return render_template('query_page.html', records_4=records_4)
+
+#period_5_sort_grade_ascending
+@app.route('/grade_ASC_p5', methods=['GET'])
+def grade_ASC_p5():
+    conn = psycopg2.connect(
+        host=hostname,
+        dbname=database,
+        user=username,
+        password=pwd,
+        port=port_id)
+
+    c = conn.cursor()
+
+    s = "SELECT * FROM period_5_spanish_2 ORDER BY student_grade ASC"
+    c.execute(s)
+    records_4 = c.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    return render_template('query_page.html', records_4=records_4)
+
+#period_5_sort_grade_descending
+@app.route('/grade_DESC_p5', methods=['GET'])
+def grade_DESC_p5():
+    conn = psycopg2.connect(
+        host=hostname,
+        dbname=database,
+        user=username,
+        password=pwd,
+        port=port_id)
+
+    c = conn.cursor()
+
+    s = "SELECT * FROM period_5_spanish_2 ORDER BY student_grade DESC"
+    c.execute(s)
+    records_4 = c.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    return render_template('query_page.html', records_4=records_4)
 
 #period_5_spanish_2_delete_function #DELETE
 @app.route('/delete_student_3/<string:id>', methods = ['POST','GET'])
