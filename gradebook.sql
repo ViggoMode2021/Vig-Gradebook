@@ -45,9 +45,37 @@ CREATE TABLE assignments_period_1_spanish_1(
     id SERIAL PRIMARY KEY,
     student_id INT,
     assignment_name TEXT NOT NULL,
-    assignment_grade INT NOT NULL
+    assignment_complete BOOLEAN NOT NULL
     );
 
 ALTER TABLE assignments_period_1_spanish_1
 ADD CONSTRAINT student_id
 FOREIGN KEY (id) REFERENCES Period_1_Spanish_1(id)
+
+CREATE TABLE assignments_period_1_spanish_1_for_real(
+    id SERIAL PRIMARY KEY,
+    assignment_name TEXT NOT NULL,
+    category TEXT NOT NULL,
+    due_date TEXT NOT NULL,
+    overall_points INT NOT NULL
+    );
+
+ALTER TABLE assignments_period_1_spanish_1_for_real
+ADD CONSTRAINT student_id
+FOREIGN KEY (id) REFERENCES Period_1_Spanish_1(id)
+
+CREATE TABLE assignments_period_1_spanish_1_results(
+    id SERIAL PRIMARY KEY,
+    score INT NOT NULL,
+    student_id INT NOT NULL,
+    assignment_id INT NOT NULL,
+    FOREIGN KEY ("student_id") REFERENCES Period_1_Spanish_1("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY ("assignment_id") REFERENCES Period_1_Spanish_1("id") ON DELETE CASCADE ON UPDATE CASCADE);
+
+ALTER TABLE assignments_period_1_spanish_1_results
+ADD CONSTRAINT student_id
+FOREIGN KEY (id) REFERENCES Period_1_Spanish_1(id)
+
+ALTER TABLE assignments_period_1_spanish_1_results
+ADD CONSTRAINT assignment_id
+FOREIGN KEY (id) REFERENCES assignments_period_1_spanish_1_for_real(id)
