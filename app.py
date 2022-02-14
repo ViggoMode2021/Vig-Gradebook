@@ -330,6 +330,10 @@ def edit_assignment_grade(id):
         cur.execute(s_2)
         records_3 = cur.fetchall()
 
+        s_3 = "SELECT id FROM assignments_period_1_spanish_1_for_real WHERE id = {0}".format(id)
+        cur.execute(s_3)
+        records_4 = cur.fetchone()
+
     except Exception as error:
         print(error)
     finally:
@@ -338,7 +342,7 @@ def edit_assignment_grade(id):
         if conn is not None:
             conn.close()
 
-    return render_template('edit_assignment_grade.html', records_2 = records_2, records_3 = records_3)
+    return render_template('edit_assignment_grade.html', records_2 = records_2, records_3 = records_3, records_4 = records_4)
 
 #period_1_spanish_1_edit_assignment_grade_page_route
 @app.route('/edit_assignment_grade_2/<string:id>', methods=['POST','GET'])
@@ -354,6 +358,7 @@ def edit_assignment_grade_2(id):
         cur = conn.cursor()
 
         grade_assignment = request.form.get("grade_assignment")
+        input_id = request.form.get("input_id")
 
         cur = conn.cursor()
 
@@ -363,12 +368,9 @@ def edit_assignment_grade_2(id):
 
         conn.commit()
 
-        s = "SELECT * FROM period_1_spanish_1"
-        cur.execute(s)
-
         cur.execute("""INSERT INTO assignments_period_1_spanish_1_results
         (score, student_id, assignment_id) VALUES (%s, %s, %s) 
-        """, (grade_assignment, id))
+        """, (grade_assignment, id, input_id))
 
         conn.commit()
 
