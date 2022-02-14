@@ -14,7 +14,6 @@
 
 <h8>Edit this assignment's grades</h8>
 
-
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -55,9 +54,10 @@
                     <div class="form-group">
         <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
             placeholder="update grade here" name='grade_assignment' style="width: 200px;">
+                        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+            placeholder="input assignment id here" name='input_id' style="width: 200px;">
                          <button type="submit" class="btn btn-warning">update grade</button>
 </form>
-
 
                         </div>
                 </td>
@@ -69,5 +69,7 @@
                   <form action="/new_assignment_update" method="GET">
     <button type="submit" class="btn btn-warning">Update/refresh assignment list</button>
 </form>
+
+{{records_4}}
 
 {% endblock %}
