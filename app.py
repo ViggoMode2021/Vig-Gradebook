@@ -322,6 +322,8 @@ def edit_assignment_grade(id):
 
         cur = conn.cursor()
 
+        input_id_2 = request.form.get("input_id_2")
+
         s = 'SELECT assignment_name FROM assignments_period_1_spanish_1_for_real WHERE id = {0}'.format(id)
         cur.execute(s)
         records_2 = cur.fetchall()
@@ -334,6 +336,9 @@ def edit_assignment_grade(id):
         cur.execute(s_3)
         records_4 = cur.fetchone()
 
+        '''cur.execute("SELECT score FROM assignments_period_1_spanish_1_results WHERE assignment_id = %s", (input_id_2))
+        records_5 = cur.fetchall()'''
+
     except Exception as error:
         print(error)
     finally:
@@ -342,7 +347,7 @@ def edit_assignment_grade(id):
         if conn is not None:
             conn.close()
 
-    return render_template('edit_assignment_grade.html', records_2 = records_2, records_3 = records_3, records_4 = records_4)
+    return render_template('edit_assignment_grade.html', records_2 = records_2, records_3 = records_3, records_4 = records_4, records_5 = records_5)
 
 #period_1_spanish_1_edit_assignment_grade_page_route
 @app.route('/edit_assignment_grade_2/<string:id>', methods=['POST','GET'])
