@@ -16,10 +16,15 @@
 
 {% for row in records_2 %}
 
+                <h43>Assignment name:</h43>
                 <h44>{{row[0]}}</h44>
                 {% endfor %}
+<h8>Edit this assignment's grades</h8>
 
-<h8>Edit this assignment's grades</h8> <h13>Assignment ID</h13>{{records_4}}
+<h13>Assignment ID</h13>
+{{records_4}}
+
+{{score_results}}
 
 
 <div class="col-md-8">
@@ -45,34 +50,11 @@
                 <form action="/edit_assignment_grade_2/{{row[0]}}" method="POST">
                     <div class="form-group">
         <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-            placeholder="update grade here" name='grade_assignment' style="width: 200px;">
+            placeholder="update grade here" name='grade_assignment' style="width: 160px;">
                         <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-            placeholder="input assignment id here" name='input_id' style="width: 200px;">
+            placeholder="input assignment id here" name='input_id' style="width: 170px;">
                          <button type="submit" class="btn btn-warning">update grade</button>
                           {% endfor %}
 </form>
-
-                        </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-                <h11>Student assignment grades</h11>
-
-<input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-            placeholder="input assignment id here" name='input_id_2' style="width: 200px;">
-                         <button type="submit" class="btn btn-warning">Check scores</button>
-
-<h12>
-    {{records_5}}
-</h12>
-
-
-                  <form action="/new_assignment_update" method="GET">
-    <button type="submit" class="btn btn-warning">Update/refresh assignment list</button>
-</form>
-
-{{records_4}}
 
 {% endblock %}
