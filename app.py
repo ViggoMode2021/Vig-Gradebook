@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 #Below is the database information
 hostname = 'localhost'
-database = 'Gradebook'
+database = 'LMS'
 username = 'postgres'
 pwd = '' #This won't be shared. Teachers and students of NuCamp that wish
 # to replicate this database should view README.md for more information. Thank you.
@@ -336,9 +336,6 @@ def edit_assignment_grade(id):
         cur.execute(s_3)
         records_4 = cur.fetchone()
 
-        '''cur.execute("SELECT score FROM assignments_period_1_spanish_1_results WHERE assignment_id = %s", (input_id_2))
-        records_5 = cur.fetchall()'''
-
     except Exception as error:
         print(error)
     finally:
@@ -347,7 +344,7 @@ def edit_assignment_grade(id):
         if conn is not None:
             conn.close()
 
-    return render_template('edit_assignment_grade.html', records_2 = records_2, records_3 = records_3, records_4 = records_4, records_5 = records_5)
+    return render_template('edit_assignment_grade.html', records_2 = records_2, records_3 = records_3, records_4 = records_4)
 
 #period_1_spanish_1_edit_assignment_grade_page_route
 @app.route('/edit_assignment_grade_2/<string:id>', methods=['POST','GET'])
@@ -364,11 +361,13 @@ def edit_assignment_grade_2(id):
 
         grade_assignment = request.form.get("grade_assignment")
         input_id = request.form.get("input_id")
+        student_id = request.form.get("student_id")
+
 
         cur = conn.cursor()
 
         cur.execute("""UPDATE period_1_spanish_1 
-        SET student_grade = %s/100
+        SET student_grade = %s/5
         WHERE id = %s""", (grade_assignment, id))
 
         conn.commit()
@@ -387,7 +386,7 @@ def edit_assignment_grade_2(id):
         if conn is not None:
             conn.close()
 
-    return render_template('edit_assignment_grade.html', grade_assignment = grade_assignment)
+    return render_template('edit_assignment_grade.html', grade_assignment = grade_assignment, student_id = student_id)
 
 @app.route('/period_1_update_assignment_grade/<string:id>', methods=['POST'])
 def period_1_update_assignment_grade(id):
