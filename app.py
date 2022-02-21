@@ -388,6 +388,44 @@ def edit_assignment_grade_2(id):
 
     return render_template('edit_assignment_grade.html', grade_assignment = grade_assignment, student_id = student_id)
 
+#period_1_spanish_1_edit_assignment_grade_page_route
+@app.route('/view_assignment_scores', methods=['GET'])
+def view_assignment_scores():
+    try:
+        conn = psycopg2.connect(
+            host=hostname,
+            dbname=database,
+            user=username,
+            password=pwd,
+            port=port_id)
+
+        cur = conn.cursor()
+
+        s = """SELECT
+        s.student_first_name,
+        s.student_last_name,
+        ci.score,
+        cu.assignment_name
+    FROM period_1_spanish_1 s
+    INNER JOIN assignments_period_1_spanish_1_results AS ci
+    ON ci.student_id = s.id
+    INNER JOIN assignments_period_1_spanish_1_for_real cu  
+    ON cu.id = ci.assignment_id
+    ORDER BY cu.assignment_name ASC;"""
+
+        cur.execute(s)
+        assignment_scores = cur.fetchall()
+
+    except Exception as error:
+        print(error)
+    finally:
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            conn.close()
+
+    return render_template('view_assignment_scores.html', assignment_scores = assignment_scores)
+
 @app.route('/period_1_update_assignment_grade/<string:id>', methods=['POST'])
 def period_1_update_assignment_grade(id):
     try:
