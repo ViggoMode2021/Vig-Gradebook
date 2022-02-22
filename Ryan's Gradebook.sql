@@ -41,17 +41,6 @@ VALUES ('Spanish 2', 'Viglione', 'Hector', 'Perron', 2024, 70),
        ('Spanish 2', 'Viglione', 'Kyle', 'Joseph', 2024, 50),
 	   ('Spanish 2', 'Viglione', 'Neimar', 'Zanzibar', 2024, 97);
 
-CREATE TABLE assignments_period_1_spanish_1(
-    id SERIAL PRIMARY KEY,
-    student_id INT,
-    assignment_name TEXT NOT NULL,
-    assignment_complete BOOLEAN NOT NULL
-    );
-
-ALTER TABLE assignments_period_1_spanish_1
-ADD CONSTRAINT student_id
-FOREIGN KEY (id) REFERENCES Period_1_Spanish_1(id)
-
 CREATE TABLE assignments_period_1_spanish_1_for_real(
     id SERIAL PRIMARY KEY,
     assignment_name TEXT NOT NULL,
@@ -69,13 +58,16 @@ CREATE TABLE assignments_period_1_spanish_1_results(
     score INT NOT NULL,
     student_id INT NOT NULL,
     assignment_id INT NOT NULL,
-    FOREIGN KEY ("student_id") REFERENCES Period_1_Spanish_1("id") ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY ("assignment_id") REFERENCES Period_1_Spanish_1("id") ON DELETE CASCADE ON UPDATE CASCADE);
+    FOREIGN KEY ("student_id") REFERENCES Period_1_Spanish_1("id") ON DELETE CASCADE,
+    FOREIGN KEY ("assignment_id") REFERENCES assignments_period_1_spanish_1_for_real("id") ON DELETE CASCADE);
 
-ALTER TABLE assignments_period_1_spanish_1_results
-ADD CONSTRAINT student_id
-FOREIGN KEY (id) REFERENCES Period_1_Spanish_1(id)
-
-ALTER TABLE assignments_period_1_spanish_1_results
-ADD CONSTRAINT assignment_id
-FOREIGN KEY (id) REFERENCES assignments_period_1_spanish_1_for_real(id)
+SELECT
+    s.student_last_name,
+    asi.score,
+    an.assignment_name
+FROM period_1_spanish_1 s
+INNER JOIN assignments_period_1_spanish_1_results AS asi
+ON as.student_id = s.id
+INNER JOIN assignments_period_1_spanish_1_for_real an
+ON an.id = asi.assignment_id
+ORDER BY an.assignment_name asc;
