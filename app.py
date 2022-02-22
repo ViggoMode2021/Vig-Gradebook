@@ -6,7 +6,7 @@ app = Flask(__name__)
 hostname = 'localhost'
 database = 'LMS'
 username = 'postgres'
-pwd = '' #This won't be shared. Teachers and students of NuCamp that wish
+pwd = 'Carrotcake2021' #This won't be shared. Teachers and students of NuCamp that wish
 # to replicate this database should view README.md for more information. Thank you.
 port_id = 5432
 conn = None
@@ -401,16 +401,17 @@ def view_assignment_scores():
         cur = conn.cursor()
 
         s = """SELECT
+		ci.id AS score_id,
         s.student_first_name,
         s.student_last_name,
         ci.score,
         cu.assignment_name
-    FROM period_1_spanish_1 s
-    INNER JOIN assignments_period_1_spanish_1_results AS ci
-    ON ci.student_id = s.id
-    INNER JOIN assignments_period_1_spanish_1_for_real cu  
-    ON cu.id = ci.assignment_id
-    ORDER BY cu.assignment_name ASC;"""
+        FROM period_1_spanish_1 s
+        INNER JOIN assignments_period_1_spanish_1_results AS ci
+        ON ci.student_id = s.id
+        INNER JOIN assignments_period_1_spanish_1_for_real cu  
+        ON cu.id = ci.assignment_id
+        ORDER BY cu.assignment_name ASC;"""
 
         cur.execute(s)
         assignment_scores = cur.fetchall()
@@ -450,6 +451,46 @@ def period_1_update_assignment_grade(id):
             conn.close()
 
     return render_template('edit_assignment_grade.html', assignment_titles = assignment_titles)
+
+@app.route('/delete_assignment_period_1/<string:id>', methods = ['DELETE','GET'])
+def delete_assignment_period_1(id):
+    conn = psycopg2.connect(
+        host=hostname,
+        dbname=database,
+        user=username,
+        password=pwd,
+        port=port_id)
+
+    cur = conn.cursor()
+
+    cur.execute('DELETE FROM assignments_period_1_spanish_1_for_real WHERE id = {0}'.format(id))
+    conn.commit()
+    s = "SELECT * FROM assignments_period_1_spanish_1_for_real"
+    cur.execute(s)
+    conn.close()
+
+    conn.close()
+    return redirect(url_for('assignment'))
+
+@app.route('/delete_assignment_score_period_1/<string:id>', methods = ['DELETE','GET'])
+def delete_assignment_score_period_1(id):
+    conn = psycopg2.connect(
+        host=hostname,
+        dbname=database,
+        user=username,
+        password=pwd,
+        port=port_id)
+
+    cur = conn.cursor()
+
+    cur.execute('DELETE FROM assignments_period_1_spanish_1_results WHERE id = {0}'.format(id))
+    conn.commit()
+    s = "SELECT * FROM assignments_period_1_spanish_1_results"
+    cur.execute(s)
+    conn.close()
+
+    conn.close()
+    return redirect(url_for('assignment'))
 
 #period_3_spanish_2 enroll student #CREATE
 @app.route('/update_2', methods=['POST'])
