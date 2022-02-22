@@ -237,7 +237,7 @@ def assignment():
 
     c = conn.cursor()
 
-    s = "SELECT * FROM assignments_period_1_spanish_1"
+    s = "SELECT * FROM assignments_period_1_spanish_1_for_real"
     c.execute(s)
     assignment_1 = c.fetchall()
 
@@ -347,8 +347,8 @@ def edit_assignment_grade(id):
     return render_template('edit_assignment_grade.html', records_2 = records_2, records_3 = records_3, records_4 = records_4)
 
 #period_1_spanish_1_edit_assignment_grade_page_route
-@app.route('/edit_assignment_grade_2/<string:id>', methods=['POST','GET'])
-def edit_assignment_grade_2(id):
+@app.route('/edit_assignment_grade_2', methods=['POST','GET'])
+def edit_assignment_grade_2():
     try:
         conn = psycopg2.connect(
             host=hostname,
@@ -363,18 +363,17 @@ def edit_assignment_grade_2(id):
         input_id = request.form.get("input_id")
         student_id = request.form.get("student_id")
 
-
         cur = conn.cursor()
 
-        cur.execute("""UPDATE period_1_spanish_1 
-        SET student_grade = %s/5
-        WHERE id = %s""", (grade_assignment, id))
+        '''cur.execute("""UPDATE period_1_spanish_1 #fix this query to mathematically upgrade grade accordingly
+        SET student_grade = %s
+        WHERE id = %s""", (grade_assignment, id))'''
 
         conn.commit()
 
         cur.execute("""INSERT INTO assignments_period_1_spanish_1_results
         (score, student_id, assignment_id) VALUES (%s, %s, %s) 
-        """, (grade_assignment, id, input_id))
+        """, (grade_assignment, student_id, input_id))
 
         conn.commit()
 
@@ -831,7 +830,7 @@ def period_5_update_grade(id):
 
     conn.commit()
 
-    s = "SELECT * FROM period_1_spanish_1"
+    s = "SELECT * FROM period_5_spanish_1"
     cur.execute(s)
 
     conn.close()
