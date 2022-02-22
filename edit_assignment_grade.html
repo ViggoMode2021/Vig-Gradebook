@@ -2,6 +2,7 @@
 
 {% block content %}
 
+
 <!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
@@ -19,10 +20,15 @@
                 <h43>Assignment name:</h43>
                 <h44>{{row[0]}}</h44>
                 {% endfor %}
-<h8>Edit this assignment's grades</h8>
+
+<br /><br />
 
 <h13>Assignment ID</h13>
 {{records_4}}
+
+<br /><br />
+
+<h8>Edit this assignment's grades</h8>
 
 {{score_results}}
 
@@ -54,7 +60,7 @@
                         <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
             placeholder="input assignment id here" name='input_id' style="width: 170px;">
                     <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-            placeholder="input student id here" name='student_id' style="width: 170px;">
+            placeholder="input student id here" name='student_id' style="width: 180px;">
                          <button type="submit" class="btn btn-warning">update grade</button>
 </form>
                         </div>
@@ -64,8 +70,7 @@
             </tbody>
     </table>
 </div>
-</div>
-</div>
+
 
 
 {% endblock %}
