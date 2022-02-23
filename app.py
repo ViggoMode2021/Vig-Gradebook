@@ -6,7 +6,7 @@ app = Flask(__name__)
 hostname = 'localhost'
 database = 'LMS'
 username = 'postgres'
-pwd = 'Carrotcake2021' #This won't be shared. Teachers and students of NuCamp that wish
+pwd = '' #This won't be shared. Teachers and students of NuCamp that wish
 # to replicate this database should view README.md for more information. Thank you.
 port_id = 5432
 conn = None
@@ -322,8 +322,6 @@ def edit_assignment_grade(id):
 
         cur = conn.cursor()
 
-        input_id_2 = request.form.get("input_id_2")
-
         s = 'SELECT assignment_name FROM assignments_period_1_spanish_1_for_real WHERE id = {0}'.format(id)
         cur.execute(s)
         records_2 = cur.fetchall()
@@ -412,6 +410,45 @@ def view_assignment_scores():
         INNER JOIN assignments_period_1_spanish_1_for_real cu  
         ON cu.id = ci.assignment_id
         ORDER BY cu.assignment_name ASC;"""
+
+        cur.execute(s)
+        assignment_scores = cur.fetchall()
+
+    except Exception as error:
+        print(error)
+    finally:
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            conn.close()
+
+    return render_template('view_assignment_scores.html', assignment_scores = assignment_scores)
+
+#period_1_spanish_1_edit_assignment_grade_page_route
+@app.route('/view_assignment_scores_last_name', methods=['GET'])
+def view_assignment_scores_last_name():
+    try:
+        conn = psycopg2.connect(
+            host=hostname,
+            dbname=database,
+            user=username,
+            password=pwd,
+            port=port_id)
+
+        cur = conn.cursor()
+
+        s = """SELECT
+		ci.id AS score_id,
+        s.student_first_name,
+        s.student_last_name,
+        ci.score,
+        cu.assignment_name
+        FROM period_1_spanish_1 s
+        INNER JOIN assignments_period_1_spanish_1_results AS ci
+        ON ci.student_id = s.id
+        INNER JOIN assignments_period_1_spanish_1_for_real cu  
+        ON cu.id = ci.assignment_id
+        ORDER BY s.student_last_name ASC;"""
 
         cur.execute(s)
         assignment_scores = cur.fetchall()
