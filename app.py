@@ -529,6 +529,63 @@ def delete_assignment_score_period_1(id):
     conn.close()
     return redirect(url_for('assignment'))
 
+@app.route('/take_attendance_period_1', methods=['GET'])
+def take_attendance_period_1():
+    conn = psycopg2.connect(
+        host=hostname,
+        dbname=database,
+        user=username,
+        password=pwd,
+        port=port_id)
+
+    c = conn.cursor()
+
+    s = "SELECT * FROM period_1_spanish_1"
+    c.execute(s)
+    records_2 = c.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    return render_template('take_attendance_period_1.html', records_2=records_2)
+
+@app.route('/take_attendance_period_1_submit', methods=['POST'])
+def take_attendance_period_1_submit():
+    try:
+        conn = psycopg2.connect(
+            host=hostname,
+            dbname=database,
+            user=username,
+            password=pwd,
+            port=port_id)
+
+        cur = conn.cursor()
+
+        s = "INSERT INTO period_1_spanish_1_attendance(month, number_day, attendance_status, student_id) VALUES (%s, %s, %s, %s)"
+
+        monthselector = request.form.get("monthselector")
+        dayselector = request.form.get("dayselector")
+        attendance = request.form.get("attendance")
+        student_id_2 = request.form.get("student_id_2")
+
+        attendance_insert_values = [(monthselector, dayselector, attendance,
+                              student_id_2)]
+
+        for record in attendance_insert_values:
+            cur.execute(s, record)
+
+            conn.commit()
+
+    except Exception as error:
+        print(error)
+    finally:
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            conn.close()
+
+        return render_template('take_attendance_period_1.html', attendance_insert_values = attendance_insert_values)
+
 #period_3_spanish_2 enroll student #CREATE
 @app.route('/update_2', methods=['POST'])
 def update_2():
