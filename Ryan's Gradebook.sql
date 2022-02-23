@@ -71,3 +71,11 @@ ON as.student_id = s.id
 INNER JOIN assignments_period_1_spanish_1_for_real an
 ON an.id = asi.assignment_id
 ORDER BY an.assignment_name asc;
+
+CREATE TABLE period_1_spanish_1_attendance(
+id SERIAL PRIMARY KEY,
+month TEXT NOT NULL,
+number_day TEXT NOT NULL,
+attendance_status TEXT NOT NULL,
+student_id INT NOT NULL,
+FOREIGN KEY ("student_id") REFERENCES Period_1_Spanish_1("id") ON DELETE CASCADE);
