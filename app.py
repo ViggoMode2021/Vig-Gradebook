@@ -561,14 +561,13 @@ def take_attendance_period_1_submit():
 
         cur = conn.cursor()
 
-        s = "INSERT INTO period_1_spanish_1_attendance(month, number_day, attendance_status, student_id) VALUES (%s, %s, %s, %s)"
+        s = "INSERT INTO period_1_spanish_1_attendance(attendance_date, attendance_status, student_id) VALUES (%s, %s, %s)"
 
         monthselector = request.form.get("monthselector")
-        dayselector = request.form.get("dayselector")
         attendance = request.form.get("attendance")
         student_id_2 = request.form.get("student_id_2")
 
-        attendance_insert_values = [(monthselector, dayselector, attendance,
+        attendance_insert_values = [(monthselector, attendance,
                               student_id_2)]
 
         for record in attendance_insert_values:
@@ -639,25 +638,15 @@ def view_attendance_by_month():
 
         cur = conn.cursor()
 
-        monthselector_2 = request.form.get("month_selector_attendance_2")
-        dayselector_2 = request.form.get("day_selector_attendance_2")
-
-        s = """SELECT
+        cur.execute("""SELECT
         student_first_name,
         student_last_name,
-        month,
-        number_day,
+        attendance_date,
         attendance_status
         FROM period_1_spanish_1_attendance att
         JOIN period_1_spanish_1 s
         ON att.student_id = s.id
-        WHERE att.month = %s AND att.number_day = %s
-        ORDER BY s.student_last_name ASC;""".format(monthselector_2, dayselector_2)
-
-        attendance_insert_values_2 = [(monthselector_2, dayselector_2)]
-
-        for record in attendance_insert_values_2:
-            cur.execute(s, record)
+        ORDER BY att.attendance_date ASC;""")
 
         attendance_results_fetch = cur.fetchall()
 
@@ -669,7 +658,7 @@ def view_attendance_by_month():
         if conn is not None:
             conn.close()
 
-    return render_template('view_attendance_by_month.html', attendance_results_fetch = attendance_results_fetch, dayselector_2 = dayselector_2)
+    return render_template('view_attendance_by_month.html', attendance_results_fetch = attendance_results_fetch)
 
 #period_3_spanish_2 enroll student #CREATE
 @app.route('/update_2', methods=['POST'])
