@@ -74,8 +74,24 @@ ORDER BY an.assignment_name asc;
 
 CREATE TABLE period_1_spanish_1_attendance(
 id SERIAL PRIMARY KEY,
-month TEXT NOT NULL,
-number_day TEXT NOT NULL,
+attendance_date VARCHAR NOT NULL,
 attendance_status TEXT NOT NULL,
 student_id INT NOT NULL,
 FOREIGN KEY ("student_id") REFERENCES Period_1_Spanish_1("id") ON DELETE CASCADE);
+
+SELECT
+month, number_day, attendance_status
+FROM period_1_spanish_1_attendance
+WHERE month = 'September' AND number_day = 2;
+
+SELECT
+student_first_name,
+student_last_name,
+attendance_date,
+number_day,
+attendance_status
+FROM period_1_spanish_1_attendance att
+JOIN period_1_spanish_1 s
+ON att.student_id = s.id
+WHERE att.attendance_date = 'September' AND att.number_day = 28
+ORDER BY s.student_last_name ASC;
