@@ -34,8 +34,7 @@
             <tr>
                 <td>First name</td>
                 <td>Last name</td>
-                <td>Month</td>
-                <td>Day</td>
+                <td>Date</td>
                 <td>Attendance status</td>
             </tr>
         </thead>
@@ -46,18 +45,13 @@
                 <td>{{row[1]}}</td>
                 <td>{{row[2]}}</td>
                 <td>{{row[3]}}</td>
-                <td>{{row[4]}}</td>
-                <td>{{row[5]}}</td>
-                <td> width="130"</td>
+                            {% endfor %}
 </form>
                         </div>
                 </td>
             </tr>
-            {% endfor %}
         </tbody>
     </table>
-</div>
-</div>
 </div>
 
 {% endblock %}
