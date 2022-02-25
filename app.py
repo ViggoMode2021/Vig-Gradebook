@@ -438,7 +438,7 @@ def view_assignment_scores_last_name():
         cur = conn.cursor()
 
         s = """SELECT
-		ci.id AS score_id,
+		ci.id as score_id,
         s.student_first_name,
         s.student_last_name,
         ci.score,
@@ -585,6 +585,91 @@ def take_attendance_period_1_submit():
             conn.close()
 
         return render_template('take_attendance_period_1.html', attendance_insert_values = attendance_insert_values)
+
+@app.route('/take_attendance_period_1_main', methods=['POST'])
+def see_attendance_period_1_main():
+    try:
+        conn = psycopg2.connect(
+            host=hostname,
+            dbname=database,
+            user=username,
+            password=pwd,
+            port=port_id)
+
+        cur = conn.cursor()
+
+        s = "INSERT INTO period_1_spanish_1_attendance(month, number_day, attendance_status, student_id) VALUES (%s, %s, %s, %s)"
+
+        monthselector = request.form.get("monthselector")
+        dayselector = request.form.get("dayselector")
+        attendance = request.form.get("attendance")
+        student_id_2 = request.form.get("student_id_2")
+
+        attendance_insert_values = [(monthselector, dayselector, attendance,
+                              student_id_2)]
+
+        for record in attendance_insert_values:
+            cur.execute(s, record)
+
+            conn.commit()
+
+    except Exception as error:
+        print(error)
+    finally:
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            conn.close()
+
+        return render_template('take_attendance_period_1.html', attendance_insert_values = attendance_insert_values)
+
+@app.route('/check_attendance_period_1_main', methods=['GET'])
+def check_attendance_period_1_main():
+    return render_template('check_attendance_period_1_main.html')
+
+@app.route('/view_attendance_by_month', methods=['POST','GET'])
+def view_attendance_by_month():
+    try:
+        conn = psycopg2.connect(
+            host=hostname,
+            dbname=database,
+            user=username,
+            password=pwd,
+            port=port_id)
+
+        cur = conn.cursor()
+
+        monthselector_2 = request.form.get("month_selector_attendance_2")
+        dayselector_2 = request.form.get("day_selector_attendance_2")
+
+        s = """SELECT
+        student_first_name,
+        student_last_name,
+        month,
+        number_day,
+        attendance_status
+        FROM period_1_spanish_1_attendance att
+        JOIN period_1_spanish_1 s
+        ON att.student_id = s.id
+        WHERE att.month = %s AND att.number_day = %s
+        ORDER BY s.student_last_name ASC;""".format(monthselector_2, dayselector_2)
+
+        attendance_insert_values_2 = [(monthselector_2, dayselector_2)]
+
+        for record in attendance_insert_values_2:
+            cur.execute(s, record)
+
+        attendance_results_fetch = cur.fetchall()
+
+    except Exception as error:
+        print(error)
+    finally:
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            conn.close()
+
+    return render_template('view_attendance_by_month.html', attendance_results_fetch = attendance_results_fetch, dayselector_2 = dayselector_2)
 
 #period_3_spanish_2 enroll student #CREATE
 @app.route('/update_2', methods=['POST'])
