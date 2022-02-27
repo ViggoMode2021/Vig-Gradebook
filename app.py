@@ -585,8 +585,28 @@ def take_attendance_period_1_submit():
 
         return render_template('take_attendance_period_1.html', attendance_insert_values = attendance_insert_values)
 
-@app.route('/take_attendance_period_1_main', methods=['POST'])
-def see_attendance_period_1_main():
+@app.route('/attendance_dates', methods=['GET'])
+def attendance_dates():
+    conn = psycopg2.connect(
+        host=hostname,
+        dbname=database,
+        user=username,
+        password=pwd,
+        port=port_id)
+
+    c = conn.cursor()
+
+    attendance_dates = "SELECT * FROM period_1_spanish_1_attendance ORDER BY attendance_date ASC"
+    c.execute(attendance_dates)
+    attendance_dates_2 = c.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    return render_template('attendance_dates.html', attendance_dates_2 = attendance_dates_2)
+
+@app.route('/view_attendance_by_month/<string:id>', methods=['GET'])
+def view_attendance_by_month(id):
     try:
         conn = psycopg2.connect(
             host=hostname,
@@ -597,56 +617,11 @@ def see_attendance_period_1_main():
 
         cur = conn.cursor()
 
-        s = "INSERT INTO period_1_spanish_1_attendance(month, number_day, attendance_status, student_id) VALUES (%s, %s, %s, %s)"
+        attendance_join = 'SELECT student_first_name, student_last_name, attendance_date, attendance_status ' \
+                          'FROM period_1_spanish_1_attendance att JOIN period_1_spanish_1 s ON att.student_id = s.id ' \
+                          'WHERE att.id = {0} ORDER BY att.attendance_date ASC;'.format(id)
 
-        monthselector = request.form.get("monthselector")
-        dayselector = request.form.get("dayselector")
-        attendance = request.form.get("attendance")
-        student_id_2 = request.form.get("student_id_2")
-
-        attendance_insert_values = [(monthselector, dayselector, attendance,
-                              student_id_2)]
-
-        for record in attendance_insert_values:
-            cur.execute(s, record)
-
-            conn.commit()
-
-    except Exception as error:
-        print(error)
-    finally:
-        if cur is not None:
-            cur.close()
-        if conn is not None:
-            conn.close()
-
-        return render_template('take_attendance_period_1.html', attendance_insert_values = attendance_insert_values)
-
-@app.route('/check_attendance_period_1_main', methods=['GET'])
-def check_attendance_period_1_main():
-    return render_template('check_attendance_period_1_main.html')
-
-@app.route('/view_attendance_by_month', methods=['POST','GET'])
-def view_attendance_by_month():
-    try:
-        conn = psycopg2.connect(
-            host=hostname,
-            dbname=database,
-            user=username,
-            password=pwd,
-            port=port_id)
-
-        cur = conn.cursor()
-
-        cur.execute("""SELECT
-        student_first_name,
-        student_last_name,
-        attendance_date,
-        attendance_status
-        FROM period_1_spanish_1_attendance att
-        JOIN period_1_spanish_1 s
-        ON att.student_id = s.id
-        ORDER BY att.attendance_date ASC;""")
+        cur.execute(attendance_join)
 
         attendance_results_fetch = cur.fetchall()
 
