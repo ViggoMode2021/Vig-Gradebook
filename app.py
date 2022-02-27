@@ -527,7 +527,7 @@ def delete_assignment_score_period_1(id):
     conn.close()
 
     conn.close()
-    return redirect(url_for('assignment'))
+    return redirect(url_for('view_assignment_scores'))
 
 @app.route('/take_attendance_period_1', methods=['GET'])
 def take_attendance_period_1():
@@ -583,7 +583,7 @@ def take_attendance_period_1_submit():
         if conn is not None:
             conn.close()
 
-        return render_template('take_attendance_period_1.html', attendance_insert_values = attendance_insert_values)
+        return redirect(url_for('take_attendance_period_1'))
 
 @app.route('/attendance_dates', methods=['GET'])
 def attendance_dates():
@@ -625,6 +625,10 @@ def view_attendance_by_month(id):
 
         attendance_results_fetch = cur.fetchall()
 
+        attendance_month = "SELECT attendance_date FROM period_1_spanish_1_attendance WHERE id = {0}".format(id)
+        cur.execute(attendance_month)
+        attendance_month_fetch = cur.fetchall()
+
     except Exception as error:
         print(error)
     finally:
@@ -633,7 +637,48 @@ def view_attendance_by_month(id):
         if conn is not None:
             conn.close()
 
-    return render_template('view_attendance_by_month.html', attendance_results_fetch = attendance_results_fetch)
+    return render_template('view_attendance_by_month.html', attendance_results_fetch = attendance_results_fetch,
+                           attendance_month_fetch = attendance_month_fetch)
+
+@app.route('/delete_attendance_record_period_1/<string:id>', methods = ['DELETE','GET'])
+def delete_attendance_record_period_1(id):
+    conn = psycopg2.connect(
+        host=hostname,
+        dbname=database,
+        user=username,
+        password=pwd,
+        port=port_id)
+
+    cur = conn.cursor()
+
+    cur.execute('DELETE FROM period_1_spanish_1_attendance WHERE id = {0}'.format(id))
+    conn.commit()
+    s = "SELECT * FROM period_1_spanish_1_attendance"
+    cur.execute(s)
+    conn.close()
+
+    conn.close()
+    return redirect(url_for('attendance_dates'))
+
+@app.route('/delete_student_attendance_record_period_1/<string:id>', methods = ['DELETE','GET'])
+def delete_student_attendance_record_period_1(id):
+    conn = psycopg2.connect(
+        host=hostname,
+        dbname=database,
+        user=username,
+        password=pwd,
+        port=port_id)
+
+    cur = conn.cursor()
+
+    cur.execute('DELETE FROM period_1_spanish_1_attendance WHERE id = {0}'.format(id))
+    conn.commit()
+    s = "SELECT * FROM period_1_spanish_1_attendance"
+    cur.execute(s)
+    conn.close()
+
+    conn.close()
+    return redirect(url_for('attendance_dates'))
 
 #period_3_spanish_2 enroll student #CREATE
 @app.route('/update_2', methods=['POST'])
