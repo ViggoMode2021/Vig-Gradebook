@@ -93,5 +93,5 @@ attendance_status
 FROM period_1_spanish_1_attendance att
 JOIN period_1_spanish_1 s
 ON att.student_id = s.id
-WHERE att.attendance_date = 'September' AND att.number_day = 28
+WHERE att.id = {0}
 ORDER BY s.student_last_name ASC;
