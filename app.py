@@ -14,7 +14,7 @@ cur = None
 
 @app.route('/') #ROUTING FOR MAIN PAGE
 def main():
-    title_two = 'Gradebook main page'
+    title_two = "Welcome to Ryan's gradebook!"
     return render_template('main_page.html', title=title_two)
 
 @app.route('/period_1_Spanish_1_enroll') #ROUTING FOR PERIOD 1 SPANISH 1 ENROLL STUDENT PAGE
@@ -363,15 +363,17 @@ def edit_assignment_grade_2():
 
         cur = conn.cursor()
 
-        '''cur.execute("""UPDATE period_1_spanish_1 #fix this query to mathematically upgrade grade accordingly
-        SET student_grade = %s
-        WHERE id = %s""", (grade_assignment, id))'''
-
         conn.commit()
 
         cur.execute("""INSERT INTO assignments_period_1_spanish_1_results
         (score, student_id, assignment_id) VALUES (%s, %s, %s) 
         """, (grade_assignment, student_id, input_id))
+
+        '''the_query = cur.execute("""SELECT AVG(score)
+        FROM assignments_period_1_spanish_1_results
+        WHERE student_id = %s""", id)
+
+        print(the_query)'''
 
         conn.commit()
 
@@ -561,13 +563,14 @@ def take_attendance_period_1_submit():
 
         cur = conn.cursor()
 
-        s = "INSERT INTO period_1_spanish_1_attendance(attendance_date, attendance_status, student_id) VALUES (%s, %s, %s)"
+        s = "INSERT INTO period_1_spanish_1_attendance(month, day, attendance_status, student_id) VALUES (%s, %s, %s, %s)"
 
         monthselector = request.form.get("monthselector")
+        dayselector = request.form.get("dayselector")
         attendance = request.form.get("attendance")
         student_id_2 = request.form.get("student_id_2")
 
-        attendance_insert_values = [(monthselector, attendance,
+        attendance_insert_values = [(monthselector,dayselector, attendance,
                               student_id_2)]
 
         for record in attendance_insert_values:
@@ -596,17 +599,10 @@ def attendance_dates():
 
     c = conn.cursor()
 
-    attendance_dates = "SELECT * FROM period_1_spanish_1_attendance ORDER BY attendance_date ASC"
-    c.execute(attendance_dates)
-    attendance_dates_2 = c.fetchall()
+    return render_template('attendance_dates.html')
 
-    conn.commit()
-    conn.close()
-
-    return render_template('attendance_dates.html', attendance_dates_2 = attendance_dates_2)
-
-@app.route('/view_attendance_by_month/<string:id>', methods=['GET'])
-def view_attendance_by_month(id):
+@app.route('/view_attendance_by_month', methods=['POST', 'GET'])
+def view_attendance_by_month():
     try:
         conn = psycopg2.connect(
             host=hostname,
@@ -617,28 +613,34 @@ def view_attendance_by_month(id):
 
         cur = conn.cursor()
 
-        attendance_join = 'SELECT student_first_name, student_last_name, attendance_date, attendance_status ' \
-                          'FROM period_1_spanish_1_attendance att JOIN period_1_spanish_1 s ON att.student_id = s.id ' \
-                          'WHERE att.id = {0} ORDER BY att.attendance_date ASC;'.format(id)
+        s = """SELECT
+        student_first_name,
+        student_last_name,
+        month,
+        day,
+        attendance_status
+        FROM period_1_spanish_1_attendance att
+        JOIN period_1_spanish_1 s
+        ON att.student_id = s.id
+        WHERE att.month = '%s' AND att.day = %s
+        ORDER BY s.student_last_name ASC;"""
 
-        cur.execute(attendance_join)
+        monthselector_2 = request.form.get("month_selector_attendance_2")
+        dayselector_2 = request.form.get("day_selector_attendance_2")
+
+        cur.execute(s, [monthselector_2, dayselector_2])
 
         attendance_results_fetch = cur.fetchall()
 
-        attendance_month = "SELECT attendance_date FROM period_1_spanish_1_attendance WHERE id = {0}".format(id)
-        cur.execute(attendance_month)
-        attendance_month_fetch = cur.fetchall()
+        conn.commit()
 
-    except Exception as error:
-        print(error)
     finally:
         if cur is not None:
             cur.close()
         if conn is not None:
             conn.close()
 
-    return render_template('view_attendance_by_month.html', attendance_results_fetch = attendance_results_fetch,
-                           attendance_month_fetch = attendance_month_fetch)
+    return render_template('view_attendance_by_month.html', attendance_results_fetch = attendance_results_fetch)
 
 @app.route('/delete_attendance_record_period_1/<string:id>', methods = ['DELETE','GET'])
 def delete_attendance_record_period_1(id):
