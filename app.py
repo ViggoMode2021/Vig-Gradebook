@@ -369,11 +369,13 @@ def edit_assignment_grade_2():
         (score, student_id, assignment_id) VALUES (%s, %s, %s) 
         """, (grade_assignment, student_id, input_id))
 
-        '''the_query = cur.execute("""SELECT AVG(score)
-        FROM assignments_period_1_spanish_1_results
-        WHERE student_id = %s""", id)
+        conn.commit()
 
-        print(the_query)'''
+        cur.execute("""UPDATE period_1_spanish_1 
+                    SET student_grade = (
+                    SELECT ROUND(AVG(score))
+                    FROM assignments_period_1_spanish_1_results)
+                    WHERE id = %s;""", (student_id))
 
         conn.commit()
 
