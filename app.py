@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 import psycopg2
 app = Flask(__name__)
 
@@ -28,10 +28,6 @@ def period_3_Spanish_2_enroll():
 @app.route('/period_5_Spanish_2_enroll') #ROUTING FOR PERIOD 2 SPANISH 2 ENROLL STUDENT PAGE
 def period_5_Spanish_2_enroll():
     return render_template('period_5_Spanish_2_enroll.html')
-
-@app.route('/regular_verbs_worksheet_period_1')
-def regular_verbs_worksheet_period_1():
-    return render_template('regular_verbs_worksheet_period_1.html')
 
 #period_1_spanish_1 enroll student #CREATE
 @app.route('/update', methods=['POST'])
@@ -93,6 +89,7 @@ def query():
     records_2 = c.fetchall()
 
     conn.commit()
+    c.close()
     conn.close()
 
     return render_template('query_page.html', records_2=records_2)
@@ -114,6 +111,7 @@ def alphabetically_p1():
     records_2 = c.fetchall()
 
     conn.commit()
+    c.close()
     conn.close()
 
     return render_template('query_page.html', records_2=records_2)
@@ -135,6 +133,7 @@ def alphabetically_first_p1():
     records_2 = c.fetchall()
 
     conn.commit()
+    c.close()
     conn.close()
 
     return render_template('query_page.html', records_2=records_2)
@@ -156,6 +155,7 @@ def grade_ASC_p1():
     records_2 = c.fetchall()
 
     conn.commit()
+    c.close()
     conn.close()
 
     return render_template('query_page.html', records_2=records_2)
@@ -177,6 +177,7 @@ def grade_DESC_p1():
     records_2 = c.fetchall()
 
     conn.commit()
+    c.close()
     conn.close()
 
     return render_template('query_page.html', records_2=records_2)
@@ -197,6 +198,7 @@ def delete_student(id):
     conn.commit()
     s = "SELECT * FROM period_1_spanish_1"
     cur.execute(s)
+    cur.close()
     conn.close()
     return redirect(url_for('query'))
 
@@ -222,6 +224,7 @@ def period_1_update_grade(id):
 
     s = "SELECT * FROM period_1_spanish_1"
     cur.execute(s)
+    cur.close()
     conn.close()
     return redirect(url_for('query'))
 
@@ -242,6 +245,7 @@ def assignment():
     assignment_1 = c.fetchall()
 
     conn.commit()
+    c.close()
     conn.close()
 
     return render_template('assignment.html', assignment_1 = assignment_1)
@@ -505,12 +509,14 @@ def delete_assignment_period_1(id):
     cur = conn.cursor()
 
     cur.execute('DELETE FROM assignments_period_1_spanish_1_for_real WHERE id = {0}'.format(id))
+
     conn.commit()
+
     s = "SELECT * FROM assignments_period_1_spanish_1_for_real"
     cur.execute(s)
+    cur.close()
     conn.close()
 
-    conn.close()
     return redirect(url_for('assignment'))
 
 @app.route('/delete_assignment_score_period_1/<string:id>', methods = ['DELETE','GET'])
@@ -528,9 +534,9 @@ def delete_assignment_score_period_1(id):
     conn.commit()
     s = "SELECT * FROM assignments_period_1_spanish_1_results"
     cur.execute(s)
+    cur.close()
     conn.close()
 
-    conn.close()
     return redirect(url_for('view_assignment_scores'))
 
 @app.route('/take_attendance_period_1', methods=['GET'])
@@ -549,6 +555,7 @@ def take_attendance_period_1():
     records_2 = c.fetchall()
 
     conn.commit()
+    c.close()
     conn.close()
 
     return render_template('take_attendance_period_1.html', records_2=records_2)
@@ -598,8 +605,6 @@ def attendance_dates():
         user=username,
         password=pwd,
         port=port_id)
-
-    c = conn.cursor()
 
     return render_template('attendance_dates.html')
 
@@ -659,9 +664,9 @@ def delete_attendance_record_period_1(id):
     conn.commit()
     s = "SELECT * FROM period_1_spanish_1_attendance"
     cur.execute(s)
+    cur.close()
     conn.close()
 
-    conn.close()
     return redirect(url_for('attendance_dates'))
 
 @app.route('/delete_student_attendance_record_period_1/<string:id>', methods = ['DELETE','GET'])
@@ -679,9 +684,9 @@ def delete_student_attendance_record_period_1(id):
     conn.commit()
     s = "SELECT * FROM period_1_spanish_1_attendance"
     cur.execute(s)
+    cur.close()
     conn.close()
 
-    conn.close()
     return redirect(url_for('attendance_dates'))
 
 #period_3_spanish_2 enroll student #CREATE
@@ -743,6 +748,7 @@ def query_2():
     c.execute(s_2)
     records_3 = c.fetchall()
 
+    c.close()
     conn.close()
 
     return render_template('query_page_period_3.html', records_3=records_3)
@@ -765,6 +771,7 @@ def alphabetically_p3():
 
     conn.commit()
     conn.close()
+    c.close()
 
     return render_template('query_page_period_3.html', records_3=records_3)
 
@@ -874,6 +881,7 @@ def period_3_update_grade(id):
     cur.execute(s)
 
     conn.close()
+    c.close()
 
     return redirect(url_for('main'))
 
@@ -937,6 +945,7 @@ def query_3():
     records_4 = c.fetchall()
 
     conn.close()
+    c.close()
 
     return render_template('query_page_period_5.html', records_4=records_4)
 
@@ -958,6 +967,7 @@ def alphabetically_p5():
 
     conn.commit()
     conn.close()
+    c.close()
 
     return render_template('query_page.html', records_4=records_4)
 
@@ -979,6 +989,7 @@ def alphabetically_first_p5():
 
     conn.commit()
     conn.close()
+    c.close()
 
     return render_template('query_page.html', records_4=records_4)
 
@@ -1000,6 +1011,7 @@ def grade_ASC_p5():
 
     conn.commit()
     conn.close()
+    c.close()
 
     return render_template('query_page.html', records_4=records_4)
 
@@ -1021,6 +1033,7 @@ def grade_DESC_p5():
 
     conn.commit()
     conn.close()
+    c.close()
 
     return render_template('query_page.html', records_4=records_4)
 
